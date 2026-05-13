@@ -1069,6 +1069,7 @@ body {
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(3, 30, 101, 0.1);
+  overscroll-behavior: contain;
 }
 
 .sidebar.open {
@@ -1151,6 +1152,8 @@ body {
   padding: 16px 12px;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-item {
@@ -1269,6 +1272,7 @@ body {
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
   backdrop-filter: blur(4px);
+  touch-action: none;
 }
 
 /* Mobile Top Navbar */

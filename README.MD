@@ -44,6 +44,3 @@ koeta-frontend/
 
 - Pastikan versi Node.js sesuai kebutuhan project.
 - Jika ada file `.env`, salin dari `.env.example` lalu sesuaikan nilainya.
-
-## 👨‍💻 Author
-

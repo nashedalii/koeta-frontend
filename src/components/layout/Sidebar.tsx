@@ -25,6 +25,16 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  // Lock body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [isMobile, isOpen])
   const [userName, setUserName] = useState('')
   const [userFoto, setUserFoto] = useState<string | null>(null)
   const [isSuperAdmin, setIsSuperAdmin] = useState(false)
@@ -242,7 +252,12 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
 
       {/* Overlay untuk mobile */}
       {isOpen && isMobile && (
-        <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />
+        <div
+          className="sidebar-overlay"
+          onPointerUp={(e) => {
+            if (e.target === e.currentTarget) setIsOpen(false)
+          }}
+        />
       )}
 
       {/* Sidebar */}
