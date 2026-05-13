@@ -181,7 +181,7 @@ export default function LoginForm() {
             color: '#ffffff', fontSize: '30px', fontWeight: '700',
             lineHeight: '1.25', marginBottom: '14px',
           }}>
-            Sistem Penilaian<br />Kinerja Driver
+            Sistem Penilaian Kinerja<br />Driver TransKoetaradja
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '14px', lineHeight: '1.75', marginBottom: '36px' }}>
             Platform manajemen dan evaluasi kinerja sopir TransKoetaradja secara digital dan terukur.
@@ -233,7 +233,7 @@ export default function LoginForm() {
               Dinas Perhubungan Aceh
             </p>
             <p style={{ color: '#64748b', fontSize: '13px', marginTop: '3px' }}>
-              Sistem Penilaian Kinerja Drive
+              Sistem Penilaian Kinerja Driver TransKoetaradja
             </p>
           </div>
 
