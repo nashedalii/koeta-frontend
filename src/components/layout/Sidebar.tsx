@@ -29,11 +29,30 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
   // Lock body scroll when mobile sidebar is open
   useEffect(() => {
     if (isMobile && isOpen) {
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
       document.body.style.overflow = 'hidden'
     } else {
+      const top = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
       document.body.style.overflow = ''
+      if (top) window.scrollTo(0, parseInt(top) * -1)
     }
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      const top = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      document.body.style.overflow = ''
+      if (top) window.scrollTo(0, parseInt(top) * -1)
+    }
   }, [isMobile, isOpen])
   const [userName, setUserName] = useState('')
   const [userFoto, setUserFoto] = useState<string | null>(null)

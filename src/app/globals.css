@@ -1061,6 +1061,7 @@ body {
   left: 0;
   top: 0;
   height: 100vh;
+  height: 100dvh;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
@@ -1096,6 +1097,7 @@ body {
   align-items: center;
   justify-content: space-between;
   min-height: 88px;
+  flex-shrink: 0;
 }
 
 .sidebar .logo-container {
@@ -1234,6 +1236,8 @@ body {
 .sidebar-footer {
   padding: 16px 12px;
   border-top: 1px solid #e5e7eb;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .logout-button {
@@ -1273,6 +1277,7 @@ body {
   z-index: 999;
   backdrop-filter: blur(4px);
   touch-action: none;
+  overscroll-behavior: none;
 }
 
 /* Mobile Top Navbar */
