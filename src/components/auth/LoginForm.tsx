@@ -233,7 +233,7 @@ export default function LoginForm() {
               Dinas Perhubungan Aceh
             </p>
             <p style={{ color: '#64748b', fontSize: '13px', marginTop: '3px' }}>
-              Sistem Penilaian Kinerja Driver TransKoetaradja
+              Sistem Penilaian Kinerja
             </p>
           </div>
 
