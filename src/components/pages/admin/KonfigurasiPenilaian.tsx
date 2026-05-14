@@ -162,7 +162,10 @@ export default function KonfigurasiPenilaian() {
   }, [selectedSiklusId, siklusList, fetchBobot])
 
   // Reminder banner: siklus aktif + bobot belum selesai + masih dalam 30 hari pertama siklus
-  const isSiklusStarted = !!selectedSiklus && selectedSiklus.status_display !== 'belum_dimulai'
+  const isSiklusStarted = !!selectedSiklus && selectedSiklus.status_display !== 'belum_dimulai' && selectedSiklus.status_display !== 'tertunda'
+
+  // Siklus tertunda: tanggal sudah lewat tapi belum diaktifkan
+  const isSiklusTertunda = !!selectedSiklus && selectedSiklus.status_display === 'tertunda'
 
   const reminderDeadline = (() => {
     if (!selectedSiklus || selectedSiklus.status_display !== 'Berjalan') return null
@@ -282,6 +285,13 @@ export default function KonfigurasiPenilaian() {
 
       setIsEditMode(false)
       fetchBobot(selectedSiklusId)
+
+      // Show appropriate message based on activation status
+      if (result.siklus_activated) {
+        showToast('success', '✅ Bobot berhasil disimpan. Siklus otomatis diaktifkan!')
+      } else {
+        showToast('success', '✅ Bobot berhasil disimpan')
+      }
     } catch (err: any) {
       showToast('error', err.message || 'Gagal menyimpan konfigurasi')
     } finally {
@@ -407,6 +417,31 @@ export default function KonfigurasiPenilaian() {
           <div className="locked-banner">
             <span>🔒</span>
             <span>Bobot tidak dapat diubah karena sudah ada penilaian yang disubmit dalam siklus ini.</span>
+          </div>
+        )}
+
+        {/* Siklus Tertunda Banner */}
+        {isSiklusTertunda && hasBobot && !isEditMode && (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: 12, flexWrap: 'wrap',
+            background: '#fef3c7', border: '1.5px solid #fcd34d', borderRadius: 14,
+            padding: '14px 20px', marginBottom: 20,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 18 }}>⏸️</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#92400e' }}>
+                Siklus ini tertunda karena bobot diatur setelah tanggal mulai. Aktifkan siklus di halaman Konfigurasi Periode.
+              </span>
+            </div>
+            <a href="/admin/konfigurasi-periode" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '7px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+              background: '#d97706', color: '#fff', textDecoration: 'none',
+              whiteSpace: 'nowrap', flexShrink: 0,
+            }}>
+              🚀 Aktifkan Siklus
+            </a>
           </div>
         )}
 

@@ -44,6 +44,12 @@ interface AlertBobotH1 {
   tanggal_mulai: string
 }
 
+interface SiklusTertunda {
+  siklus_id: number
+  nama_siklus: string
+  has_bobot: boolean
+}
+
 interface DashboardData {
   total_driver_aktif: number
   total_armada: number
@@ -55,6 +61,7 @@ interface DashboardData {
   warning_periode: WarningPeriode | null
   warning_bobot: WarningBobot | null
   alert_bobot_h1: AlertBobotH1 | null
+  siklus_tertunda: SiklusTertunda | null
 }
 
 const RANK_COLORS  = ['#f59e0b', '#94a3b8', '#cd7f32', '#667eea', '#667eea']
@@ -420,6 +427,33 @@ export default function AdminDashboard() {
               whiteSpace: 'nowrap', flexShrink: 0,
             }}>
               Atur Bobot Sekarang
+            </a>
+          </div>
+        )}
+
+        {/* ── Siklus Tertunda ─────────────────────────────────── */}
+        {data.siklus_tertunda && (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: 12, flexWrap: 'wrap',
+            background: '#fef3c7', border: '1.5px solid #fcd34d', borderRadius: 14,
+            padding: '14px 20px', marginBottom: 20,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 18 }}>⏸️</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#92400e' }}>
+                {data.siklus_tertunda.has_bobot
+                  ? `Siklus "${data.siklus_tertunda.nama_siklus}" tertunda — bobot sudah dikonfigurasi, aktifkan siklus untuk memulai penilaian.`
+                  : `Siklus "${data.siklus_tertunda.nama_siklus}" tertunda — konfigurasikan bobot lalu aktifkan siklus.`}
+              </span>
+            </div>
+            <a href={data.siklus_tertunda.has_bobot ? '/admin/konfigurasi-periode' : '/admin/konfigurasi'} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '7px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+              background: '#d97706', color: '#fff', textDecoration: 'none',
+              whiteSpace: 'nowrap', flexShrink: 0,
+            }}>
+              {data.siklus_tertunda.has_bobot ? '🚀 Aktifkan Siklus' : '⚙️ Atur Bobot'}
             </a>
           </div>
         )}

@@ -11,8 +11,9 @@ interface Siklus {
   tanggal_mulai: string
   tanggal_selesai: string
   status_siklus: 'aktif' | 'nonaktif'
-  status_display: 'berjalan' | 'belum_dimulai' | 'selesai' | 'nonaktif'
+  status_display: 'berjalan' | 'belum_dimulai' | 'selesai' | 'nonaktif' | 'tertunda'
   jumlah_periode: number
+  is_activated: boolean
 }
 
 interface Periode {
@@ -52,6 +53,7 @@ function autoNamaSiklus(mulai: string, selesai: string) {
 const STATUS_CONFIG = {
   berjalan:      { label: 'Berjalan',      color: '#16a34a', bg: '#dcfce7' },
   belum_dimulai: { label: 'Belum Dimulai', color: '#64748b', bg: '#f1f5f9' },
+  tertunda:      { label: 'Tertunda',      color: '#d97706', bg: '#fef3c7' },
   selesai:       { label: 'Selesai',       color: '#2563eb', bg: '#dbeafe' },
   nonaktif:      { label: 'Nonaktif',      color: '#dc2626', bg: '#fee2e2' },
 }
@@ -90,6 +92,7 @@ export default function KonfigurasiPenilaian() {
 
   const [confirmDelete, setConfirmDelete] = useState<Siklus | null>(null)
   const [deleting, setDeleting]           = useState(false)
+  const [activating, setActivating]       = useState(false)
 
   const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -192,6 +195,20 @@ export default function KonfigurasiPenilaian() {
       showToast('error', err.message ?? 'Gagal menghapus siklus')
     } finally {
       setDeleting(false)
+    }
+  }
+
+  // ── Activate siklus (manual, untuk siklus tertunda) ─────────────────────
+  const handleActivate = async (siklus: Siklus) => {
+    setActivating(true)
+    try {
+      const res = await apiFetch(`/api/siklus/${siklus.siklus_id}/activate`, { method: 'PUT' })
+      await fetchSikluses()
+      showToast('success', res.message ?? 'Siklus berhasil diaktifkan')
+    } catch (err: any) {
+      showToast('error', err.message ?? 'Gagal mengaktifkan siklus')
+    } finally {
+      setActivating(false)
     }
   }
 
@@ -388,7 +405,12 @@ export default function KonfigurasiPenilaian() {
                       <button onClick={() => openDetail(s)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
                         📋 Detail
                       </button>
-                      {s.status_display === 'belum_dimulai' && (
+                      {s.status_display === 'tertunda' && (
+                        <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem', background: '#f59e0b', color: '#fff', border: 'none' }}>
+                          🚀 Aktifkan
+                        </button>
+                      )}
+                      {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (
                         <button onClick={() => setConfirmDelete(s)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
                           🗑️ Hapus
                         </button>
@@ -425,7 +447,12 @@ export default function KonfigurasiPenilaian() {
                       </td>
                       <td style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <button onClick={() => openDetail(s)} className="btn-edit">📋 Detail</button>
-                        {s.status_display === 'belum_dimulai' && (
+                        {s.status_display === 'tertunda' && (
+                          <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>
+                            🚀 Aktifkan
+                          </button>
+                        )}
+                        {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (
                           <button onClick={() => setConfirmDelete(s)} className="btn-delete">🗑️ Hapus</button>
                         )}
                       </td>
