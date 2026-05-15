@@ -93,6 +93,7 @@ export default function KonfigurasiPenilaian() {
   const [confirmDelete, setConfirmDelete] = useState<Siklus | null>(null)
   const [deleting, setDeleting]           = useState(false)
   const [activating, setActivating]       = useState(false)
+  const [confirmActivate, setConfirmActivate] = useState<Siklus | null>(null)
 
   const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -199,10 +200,12 @@ export default function KonfigurasiPenilaian() {
   }
 
   // ── Activate siklus (manual, untuk siklus tertunda) ─────────────────────
-  const handleActivate = async (siklus: Siklus) => {
+  const handleActivate = async () => {
+    if (!confirmActivate) return
     setActivating(true)
     try {
-      const res = await apiFetch(`/api/siklus/${siklus.siklus_id}/activate`, { method: 'PUT' })
+      const res = await apiFetch(`/api/siklus/${confirmActivate.siklus_id}/activate`, { method: 'PUT' })
+      setConfirmActivate(null)
       await fetchSikluses()
       showToast('success', res.message ?? 'Siklus berhasil diaktifkan')
     } catch (err: any) {
@@ -402,7 +405,7 @@ export default function KonfigurasiPenilaian() {
                   </div>
                   <div className="user-card-right" style={{ flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
                     {s.status_display === 'tertunda' && (
-                      <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '5px 10px', fontSize: '0.75rem', background: '#f59e0b', color: '#fff', border: 'none', whiteSpace: 'nowrap' }}>
+                      <button onClick={() => setConfirmActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '5px 10px', fontSize: '0.75rem', background: '#f59e0b', color: '#fff', border: 'none', whiteSpace: 'nowrap' }}>
                         ▶ Aktifkan
                       </button>
                     )}
@@ -448,7 +451,7 @@ export default function KonfigurasiPenilaian() {
                       <td style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                         <button onClick={() => openDetail(s)} className="btn-edit">📋 Detail</button>
                         {s.status_display === 'tertunda' && (
-                          <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>
+                          <button onClick={() => setConfirmActivate(s)} disabled={activating} className="btn-edit" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>
                             ▶ Aktifkan
                           </button>
                         )}
@@ -480,6 +483,26 @@ export default function KonfigurasiPenilaian() {
                 </button>
                 <button className="btn btn-danger" onClick={handleDelete} disabled={deleting}>
                   {deleting ? 'Menghapus...' : 'Ya, Hapus'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Confirm Activate Modal ── */}
+        {confirmActivate && (
+          <div className="modal-overlay" onClick={() => setConfirmActivate(null)}>
+            <div className="confirm-modal" onClick={e => e.stopPropagation()}>
+              <h3 className="confirm-modal-title">Aktifkan Siklus?</h3>
+              <p className="confirm-modal-desc">
+                Apakah Anda yakin ingin mengaktifkan siklus <strong>{confirmActivate.nama_siklus}</strong>? Setelah diaktifkan, petugas dapat mulai melakukan penilaian dan siklus tidak dapat dihapus.
+              </p>
+              <div className="confirm-modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+                <button className="btn btn-outline" onClick={() => setConfirmActivate(null)} disabled={activating} style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  Batal
+                </button>
+                <button className="btn btn-save" onClick={handleActivate} disabled={activating} style={{ flex: 1, background: '#d97706', border: 'none', color: '#fff', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {activating ? 'Mengaktifkan...' : 'Ya, Aktifkan'}
                 </button>
               </div>
             </div>
