@@ -301,6 +301,7 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
                 height={40}
                 className="logo-icon"
                 priority
+                style={{ width: 'auto', height: 'auto' }}
               />
             )}
           </div>

@@ -161,7 +161,7 @@ export default function LoginForm() {
               width={96}
               height={96}
               priority
-              style={{ objectFit: 'contain', display: 'block' }}
+              style={{ objectFit: 'contain', display: 'block', width: 'auto', height: 'auto' }}
             />
           </div>
 
@@ -228,7 +228,7 @@ export default function LoginForm() {
 
           {/* Mobile branding */}
           <div className="lg:hidden flex flex-col items-center" style={{ marginBottom: '36px' }}>
-            <Image src="/logodishub.png" alt="Logo" width={70} height={70} priority style={{ objectFit: 'contain' }} />
+            <Image src="/logodishub.png" alt="Logo" width={70} height={70} priority style={{ objectFit: 'contain', width: 'auto', height: 'auto' }} />
             <p style={{ marginTop: '12px', color: '#031E65', fontWeight: '700', fontSize: '15px' }}>
               Dinas Perhubungan Aceh
             </p>
