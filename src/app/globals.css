@@ -1422,6 +1422,8 @@ body {
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .controls-left {
@@ -2560,6 +2562,11 @@ body {
   .table-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+  }
+
+  .table-controls > div {
+    width: 100%;
   }
   
   .controls-left {
@@ -2573,11 +2580,12 @@ body {
   }
   
   .role-filter {
-    width: 100%;
+    min-width: 110px;
+    flex-shrink: 0;
   }
   
   .btn-add-user {
-    width: 100%;
+    width: auto;
     justify-content: center;
   }
   

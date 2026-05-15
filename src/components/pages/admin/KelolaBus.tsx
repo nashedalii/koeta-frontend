@@ -191,8 +191,8 @@ export default function KelolaBus() {
         />
 
         {/* ── Controls ── */}
-        <div className="table-controls">
-          <div className="search-box">
+        <div className="table-controls" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="search-box" style={{ width: '100%', maxWidth: '100%' }}>
             <span className="search-icon"><SearchIcon /></span>
             <input
               type="text"
@@ -203,19 +203,21 @@ export default function KelolaBus() {
             />
           </div>
 
-          {isSuperAdmin && (
-            <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter">
-              <option value="All">Semua Armada</option>
-              {armadaOptions.map(a => (
-                <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
-              ))}
-            </select>
-          )}
+          <div style={{ display: 'flex', gap: 10, width: '100%' }}>
+            {isSuperAdmin && (
+              <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter" style={{ flex: 1, minWidth: 0 }}>
+                <option value="All">Semua Armada</option>
+                {armadaOptions.map(a => (
+                  <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
+                ))}
+              </select>
+            )}
 
-          <button onClick={openAdd} className="btn-add-user">
-            <PlusIcon />
-            <span>Tambah Bus</span>
-          </button>
+            <button onClick={openAdd} className="btn-add-user" style={{ flex: 1, minWidth: 0 }}>
+              <PlusIcon />
+              <span>Tambah Bus</span>
+            </button>
+          </div>
         </div>
 
         {/* ── Table ── */}
