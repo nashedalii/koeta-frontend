@@ -236,27 +236,29 @@ export default function KelolaBus() {
               ) : filtered.map(bus => (
                 <div key={bus.bus_id} className="user-card">
                   <div className="user-card-left">
-                    <div className="user-card-avatar">
-                      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, fontSize: '0.7rem', fontWeight: 700, background: '#e0e7ff', color: '#031e65', marginRight: 8, flexShrink: 0 }}>
-                        {bus.kode_bus}
-                      </span>
-                    </div>
                     <div className="user-card-info">
-                      <div className="user-card-name">{bus.nopol}</div>
+                      <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '2px 8px', borderRadius: 6, fontSize: '0.7rem', fontWeight: 700, background: '#e0e7ff', color: '#031e65', flexShrink: 0 }}>
+                          {bus.kode_bus}
+                        </span>
+                        {bus.nopol}
+                        <StatusDot status={bus.status_aktif} />
+                      </div>
                       <div className="user-card-meta">
                         {bus.nama_armada && <span className="role-badge role-petugas" style={{ fontSize: '0.65rem', padding: '2px 7px' }}>{bus.nama_armada}</span>}
-                        {bus.nama_driver && <span className="user-card-hp">{bus.nama_driver}</span>}
                       </div>
+                      {bus.nama_driver && (
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 2 }}>{bus.nama_driver}</div>
+                      )}
                     </div>
                   </div>
                   <div className="user-card-right">
-                    <StatusDot status={bus.status_aktif} />
                     <div className="user-card-actions">
-                      <button onClick={() => openEdit(bus)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                        <EditIcon /> Edit
+                      <button onClick={() => openEdit(bus)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                        <EditIcon />
                       </button>
-                      <button onClick={() => openDelete(bus)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                        <TrashIcon /> Hapus
+                      <button onClick={() => openDelete(bus)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                        <TrashIcon />
                       </button>
                     </div>
                   </div>

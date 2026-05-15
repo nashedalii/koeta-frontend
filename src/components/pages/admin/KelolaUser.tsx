@@ -321,6 +321,17 @@ export default function KelolaUser() {
   const [showResetModal, setShowResetModal] = useState(false)
   const [showAddModal, setShowAddModal]     = useState(false)
 
+  // Lock body scroll when any modal is open
+  useEffect(() => {
+    const anyModalOpen = showModal || showDeleteModal || showResetModal || showAddModal
+    if (anyModalOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [showModal, showDeleteModal, showResetModal, showAddModal])
+
   const [selectedUser, setSelectedUser]   = useState<UserData | null>(null)
   const [newPassword, setNewPassword]     = useState('')
   const [passwordModalTitle, setPasswordModalTitle] = useState('Password Berhasil Direset')

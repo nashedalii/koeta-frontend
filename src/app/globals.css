@@ -8754,6 +8754,9 @@ body {
 .modal-content .modal-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   border-radius: 16px 16px 0 0 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
   padding: 20px 24px !important;
   display: flex !important;
   align-items: center !important;
