@@ -407,7 +407,7 @@ export default function KonfigurasiPenilaian() {
                       </button>
                       {s.status_display === 'tertunda' && (
                         <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem', background: '#f59e0b', color: '#fff', border: 'none' }}>
-                          🚀 Aktifkan
+                          ▶ Aktifkan
                         </button>
                       )}
                       {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (
@@ -449,7 +449,7 @@ export default function KonfigurasiPenilaian() {
                         <button onClick={() => openDetail(s)} className="btn-edit">📋 Detail</button>
                         {s.status_display === 'tertunda' && (
                           <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>
-                            🚀 Aktifkan
+                            ▶ Aktifkan
                           </button>
                         )}
                         {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (

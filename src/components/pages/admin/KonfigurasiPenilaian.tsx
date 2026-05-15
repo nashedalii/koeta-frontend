@@ -429,8 +429,7 @@ export default function KonfigurasiPenilaian() {
             padding: '14px 20px', marginBottom: 20,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 18 }}>⏸️</span>
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#92400e' }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#92400e', textAlign: 'justify' }}>
                 Siklus ini tertunda karena bobot diatur setelah tanggal mulai. Aktifkan siklus di halaman Konfigurasi Periode.
               </span>
             </div>
@@ -440,7 +439,7 @@ export default function KonfigurasiPenilaian() {
               background: '#d97706', color: '#fff', textDecoration: 'none',
               whiteSpace: 'nowrap', flexShrink: 0,
             }}>
-              🚀 Aktifkan Siklus
+              ▶ Aktifkan Siklus
             </a>
           </div>
         )}
@@ -494,7 +493,7 @@ export default function KonfigurasiPenilaian() {
                 {!isLocked && !isSiklusStarted && (
                   <div style={{ padding: '16px' }}>
                     <button onClick={handleStartEdit} className="btn-edit-config">
-                      ✏️ Edit Bobot
+                      ✎ Edit Bobot
                     </button>
                   </div>
                 )}
@@ -504,7 +503,7 @@ export default function KonfigurasiPenilaian() {
                 <p className="no-bobot-text">Belum ada bobot yang dikonfigurasi untuk siklus ini.</p>
                 {!isLocked && !isSiklusStarted && (
                   <button onClick={handleStartEdit} className="btn-save-config">
-                    ➕ Konfigurasi Bobot Baru
+                    + Konfigurasi Bobot Baru
                   </button>
                 )}
               </div>
@@ -517,7 +516,7 @@ export default function KonfigurasiPenilaian() {
               <div className="table-header-actions">
                 <h3 className="table-title">Edit Indikator Penilaian</h3>
                 <button onClick={handleAddIndicator} className="btn-add-indicator">
-                  ➕ Tambah Indikator Baru
+                  + Tambah Indikator Baru
                 </button>
               </div>
 
@@ -621,7 +620,7 @@ export default function KonfigurasiPenilaian() {
                 className="btn-save-config"
                 disabled={totalBobot !== 100 || isSaving}
               >
-                {isSaving ? 'Menyimpan...' : '💾 Simpan Konfigurasi'}
+                {isSaving ? 'Menyimpan...' : 'Simpan Konfigurasi'}
               </button>
             </div>
           </div>
