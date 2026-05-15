@@ -597,7 +597,12 @@ export default function KelolaUser() {
               <tbody>
                 {filtered.map((user, idx) => {
                   const isSelf = user.id === callerId && (user.role === 'admin' || user.role === 'super_admin')
-                  const canDelete = !isSelf && (isSuperAdmin || (user.role !== 'admin' && user.role !== 'super_admin'))
+                  // Super admin bisa edit/hapus semua kecuali sesama super_admin
+                  // Admin vendor tidak bisa edit/hapus admin atau super_admin
+                  const canEdit = isSuperAdmin
+                    ? user.role !== 'super_admin'
+                    : (user.role !== 'admin' && user.role !== 'super_admin')
+                  const canDelete = canEdit && !isSelf
                   return (
                   <tr key={`${user.role}-${user.id}`}>
                     <td>{idx + 1}</td>
@@ -637,9 +642,11 @@ export default function KelolaUser() {
                     </td>
                     <td><StatusDot status={user.status_aktif} /></td>
                     <td className="action-buttons">
-                      <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                        <EditIcon /> Edit
-                      </button>
+                      {canEdit && (
+                        <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                          <EditIcon /> Edit
+                        </button>
+                      )}
                       {canDelete && (
                         <button onClick={() => openDelete(user)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                           <TrashIcon /> Hapus
@@ -656,7 +663,10 @@ export default function KelolaUser() {
             <div className="user-card-list">
               {filtered.map((user, idx) => {
                 const isSelf = user.id === callerId && (user.role === 'admin' || user.role === 'super_admin')
-                const canDelete = !isSelf && (isSuperAdmin || (user.role !== 'admin' && user.role !== 'super_admin'))
+                const canEdit = isSuperAdmin
+                  ? user.role !== 'super_admin'
+                  : (user.role !== 'admin' && user.role !== 'super_admin')
+                const canDelete = canEdit && !isSelf
                 return (
                 <div key={`card-${user.role}-${user.id}`} className="user-card">
                   <div className="user-card-left">
@@ -693,9 +703,11 @@ export default function KelolaUser() {
                   </div>
                   <div className="user-card-right">
                     <div className="user-card-actions">
-                      <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
-                        <EditIcon />
-                      </button>
+                      {canEdit && (
+                        <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                          <EditIcon />
+                        </button>
+                      )}
                       {canDelete && (
                         <button onClick={() => openDelete(user)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
                           <TrashIcon />
