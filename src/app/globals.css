@@ -2677,7 +2677,18 @@ body {
   border-collapse: collapse;
   font-size: 15px;
   background: white;
-  table-layout: fixed;
+}
+
+.config-table .col-no {
+  width: 60px;
+}
+
+.config-table .col-bobot {
+  width: 120px;
+}
+
+.config-table .col-aksi {
+  width: 80px;
 }
 
 .config-table thead {
@@ -2952,6 +2963,7 @@ body {
   border-radius: 20px;
   font-weight: 700;
   font-size: 16px;
+  white-space: nowrap;
 }
 
 .total-badge.valid {
@@ -2962,6 +2974,19 @@ body {
 .total-badge.invalid {
   background: #fee2e2;
   color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .total-row td {
+    padding: 10px 6px !important;
+    font-size: 12px;
+  }
+
+  .total-badge {
+    padding: 5px 10px;
+    font-size: 12px;
+    gap: 4px;
+  }
 }
 
 /* Progress Section */
@@ -3300,7 +3325,53 @@ body {
   }
 
   .config-table {
-    min-width: 600px;
+    min-width: unset;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .config-table th,
+  .config-table td {
+    padding: 8px 6px;
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .config-table .col-no {
+    width: 28px !important;
+  }
+
+  .config-table .col-bobot {
+    width: 62px !important;
+  }
+
+  .config-table .col-aksi {
+    width: 42px !important;
+  }
+
+  .input-indikator-name {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  .input-bobot {
+    padding: 7px 8px;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .input-wrapper {
+    min-width: unset;
+  }
+
+  .table-title {
+    font-size: 14px;
+  }
+
+  .btn-delete-indicator {
+    font-size: 14px;
+    padding: 4px 6px;
   }
 }
 
@@ -3310,7 +3381,7 @@ body {
   }
 
   .progress-label {
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .progress-bar-container {

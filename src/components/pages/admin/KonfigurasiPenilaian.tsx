@@ -476,9 +476,9 @@ export default function KonfigurasiPenilaian() {
                 <table className="config-table">
                   <thead>
                     <tr>
-                      <th style={{ width: '80px' }}>No</th>
+                      <th className="col-no">No</th>
                       <th>Indikator</th>
-                      <th style={{ width: '150px' }}>Bobot (%)</th>
+                      <th className="col-bobot">Bobot (%)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -524,10 +524,10 @@ export default function KonfigurasiPenilaian() {
               <table className="config-table">
                 <thead>
                   <tr>
-                    <th style={{ width: '80px' }}>No</th>
+                    <th className="col-no">No</th>
                     <th>Indikator</th>
-                    <th style={{ width: '150px' }}>Bobot (%)</th>
-                    <th style={{ width: '100px' }}>Aksi</th>
+                    <th className="col-bobot">Bobot (%)</th>
+                    <th className="col-aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -578,8 +578,8 @@ export default function KonfigurasiPenilaian() {
                     </tr>
                   ))}
                   <tr className="total-row">
-                    <td colSpan={2} className="text-right font-bold">Total Bobot</td>
-                    <td className="text-center font-bold">
+                    <td colSpan={3} className="text-right font-bold">
+                      <span style={{ marginRight: 8 }}>Total Bobot</span>
                       <span className={`total-badge ${totalBobot === 100 ? 'valid' : 'invalid'}`}>
                         {totalBobot}% {totalBobot === 100 ? '✅' : '⚠️'}
                       </span>
