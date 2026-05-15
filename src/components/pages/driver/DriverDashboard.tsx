@@ -70,6 +70,43 @@ export default function DriverDashboard() {
   const [selectedSiklusId, setSelectedSiklusId] = useState<number | null>(null)
   const [isLoading, setIsLoading]   = useState(true)
   const [error, setError]           = useState<string | null>(null)
+  const [countdown, setCountdown]   = useState<string | null>(null)
+  const [siklusMendatang, setSiklusMendatang] = useState<{ nama_siklus: string; tanggal_mulai: string } | null>(null)
+
+  // Fetch siklus mendatang (untuk timer)
+  useEffect(() => {
+    const fetchMendatang = async () => {
+      try {
+        const result = await apiFetch('/api/siklus/mendatang')
+        if (result?.siklus) setSiklusMendatang(result.siklus)
+      } catch { /* ignore */ }
+    }
+    fetchMendatang()
+  }, [])
+
+  // Timer countdown
+  useEffect(() => {
+    if (!siklusMendatang) { setCountdown(null); return }
+
+    const target = new Date(`${siklusMendatang.tanggal_mulai}T00:00:00`)
+
+    const tick = () => {
+      const diff = target.getTime() - Date.now()
+      if (diff <= 0) {
+        setCountdown('00:00:00:00')
+        return
+      }
+      const d = Math.floor(diff / 86400000)
+      const h = Math.floor((diff % 86400000) / 3600000)
+      const m = Math.floor((diff % 3600000) / 60000)
+      const s = Math.floor((diff % 60000) / 1000)
+      setCountdown(`${String(d).padStart(2,'0')}:${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`)
+    }
+
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [siklusMendatang])
 
   useEffect(() => {
     const fetchSiklus = async () => {
@@ -311,6 +348,77 @@ export default function DriverDashboard() {
             ))}
           </div>
         </div>
+
+        {/* ── Timer Siklus Mendatang ─────────────────────────── */}
+        {noSiklus && siklusMendatang && countdown !== null && (
+          <div style={{
+            background: '#fff',
+            borderRadius: 20,
+            padding: '24px 28px',
+            marginBottom: 24,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+            border: '1px solid #f1f5f9',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Top accent */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 4,
+              background: countdown === '00:00:00:00'
+                ? 'linear-gradient(90deg, #f59e0b, #d97706)'
+                : 'linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6)',
+            }} />
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 20 }}>{countdown === '00:00:00:00' ? '⏸️' : '⏱️'}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: countdown === '00:00:00:00' ? '#92400e' : '#1e3a8a', letterSpacing: '0.03em' }}>
+                  {countdown === '00:00:00:00' ? 'Siklus Tertunda' : 'Periode Penilaian Dimulai Dalam'}
+                </span>
+              </div>
+              <span style={{ fontSize: 12, color: '#64748b', background: '#f1f5f9', padding: '3px 10px', borderRadius: 999, fontWeight: 500 }}>
+                {siklusMendatang.nama_siklus}
+              </span>
+            </div>
+
+            {/* Timer digits */}
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: countdown === '00:00:00:00' ? 16 : 0 }}>
+              {countdown.split(':').map((val, i) => {
+                const labels = ['Hari', 'Jam', 'Menit', 'Detik']
+                const colors = countdown === '00:00:00:00'
+                  ? ['#d97706', '#d97706', '#d97706', '#d97706']
+                  : ['#3b82f6', '#6366f1', '#8b5cf6', '#10b981']
+                const bgs = countdown === '00:00:00:00'
+                  ? ['#fef3c7', '#fef3c7', '#fef3c7', '#fef3c7']
+                  : ['#eff6ff', '#eef2ff', '#f5f3ff', '#f0fdf4']
+                const borders = countdown === '00:00:00:00'
+                  ? ['#fcd34d', '#fcd34d', '#fcd34d', '#fcd34d']
+                  : ['#bfdbfe', '#c7d2fe', '#ddd6fe', '#bbf7d0']
+                return (
+                  <div key={i} style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    background: bgs[i], borderRadius: 12, padding: '12px 16px', minWidth: 64, flex: '1 1 0',
+                    border: `1.5px solid ${borders[i]}`,
+                  }}>
+                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: colors[i], fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>
+                      {val}
+                    </span>
+                    <span style={{ fontSize: 10, color: colors[i], marginTop: 6, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.8 }}>
+                      {labels[i]}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Pesan tertunda */}
+            {countdown === '00:00:00:00' && (
+              <p style={{ margin: 0, textAlign: 'center', fontSize: 13, color: '#92400e', fontWeight: 500 }}>
+                Siklus sedang tertunda, harap bersabar menunggu konfigurasi admin.
+              </p>
+            )}
+          </div>
+        )}
 
         {/* ── Performance Section ───────────────────────────────── */}
         {noSiklus ? (
