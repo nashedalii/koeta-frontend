@@ -33,6 +33,7 @@ interface BobotItem {
 interface Siklus {
   siklus_id: number
   nama_siklus: string
+  status_display: string
 }
 
 type ChartType = 'total' | 'components'
@@ -65,10 +66,19 @@ export default function DriverVisualisasi() {
     const fetchSiklus = async () => {
       try {
         const data = await apiFetch('/api/siklus')
-        setSiklusList(data || [])
-        if (data && data.length > 0) setSelectedSiklusId(data[0].siklus_id)
+        // Driver hanya bisa lihat siklus yang sudah berjalan atau selesai
+        const available = (data || []).filter(
+          (s: Siklus) => s.status_display === 'berjalan' || s.status_display === 'selesai'
+        )
+        setSiklusList(available)
+        if (available.length > 0) {
+          setSelectedSiklusId(available[0].siklus_id)
+        } else {
+          setIsLoading(false)
+        }
       } catch {
         setError('Gagal memuat data siklus')
+        setIsLoading(false)
       }
     }
     fetchSiklus()
@@ -256,6 +266,7 @@ export default function DriverVisualisasi() {
           </svg>
         }
         actions={
+          siklusList.length > 0 ? (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <select
               value={selectedSiklusId ?? ''}
@@ -283,6 +294,7 @@ export default function DriverVisualisasi() {
               <option value="components" style={{ color: '#0f172a' }}>Grafik per Komponen</option>
             </select>
           </div>
+          ) : undefined
         }
       />
 
@@ -290,6 +302,10 @@ export default function DriverVisualisasi() {
 
       {isLoading ? (
         <div className="loading-message">Memuat data...</div>
+      ) : siklusList.length === 0 ? (
+        <div className="empty-state">
+          <p>Belum ada siklus penilaian yang aktif. Silakan tunggu informasi dari admin.</p>
+        </div>
       ) : periodes.length === 0 ? (
         <div className="empty-state">
           <p>Belum ada penilaian yang disetujui dalam siklus ini.</p>

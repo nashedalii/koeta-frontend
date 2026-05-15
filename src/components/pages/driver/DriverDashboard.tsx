@@ -40,6 +40,7 @@ interface RankingData {
 interface Siklus {
   siklus_id: number
   nama_siklus: string
+  status_display: string
 }
 
 function getScoreColor(score: number) {
@@ -74,11 +75,15 @@ export default function DriverDashboard() {
     const fetchSiklus = async () => {
       try {
         const data = await apiFetch('/api/siklus')
-        setSiklusList(data || [])
-        if (data && data.length > 0) {
-          setSelectedSiklusId(data[0].siklus_id)
+        // Driver hanya bisa lihat siklus yang sudah berjalan atau selesai
+        const available = (data || []).filter(
+          (s: Siklus) => s.status_display === 'berjalan' || s.status_display === 'selesai'
+        )
+        setSiklusList(available)
+        if (available.length > 0) {
+          setSelectedSiklusId(available[0].siklus_id)
         } else {
-          // Tidak ada siklus, fetch profile saja
+          // Tidak ada siklus aktif, fetch profile saja
           try {
             const profileData = await apiFetch('/api/driver/me')
             setProfile(profileData)
@@ -323,7 +328,7 @@ export default function DriverDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
             </svg>
             <p style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: '#374151' }}>Belum Ada Siklus Penilaian</p>
-            <p style={{ margin: 0, fontSize: 14, color: '#94a3b8' }}>Siklus penilaian belum dibuat oleh admin. Silakan tunggu informasi lebih lanjut.</p>
+            <p style={{ margin: 0, fontSize: 14, color: '#94a3b8' }}>Belum ada siklus penilaian yang aktif. Silakan tunggu informasi dari admin.</p>
           </div>
         ) : (
         <div
