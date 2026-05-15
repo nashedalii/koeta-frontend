@@ -661,7 +661,10 @@ export default function KelolaUser() {
                 <div key={`card-${user.role}-${user.id}`} className="user-card">
                   <div className="user-card-left">
                     <div className="user-card-info">
-                      <div className="user-card-name" style={isSelf ? { fontWeight: 700, color: '#2563eb' } : undefined}>{user.nama}</div>
+                      <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 6, ...(isSelf ? { fontWeight: 700, color: '#2563eb' } : {}) }}>
+                        {user.nama}
+                        <StatusDot status={user.status_aktif} />
+                      </div>
                       <div className="user-card-meta">
                         <span className={`role-badge role-${user.role === 'super_admin' ? 'super-admin' : user.role}`} style={{ fontSize: '0.65rem', padding: '2px 7px' }}>
                           {ROLE_LABEL[user.role]}
@@ -689,14 +692,13 @@ export default function KelolaUser() {
                     </div>
                   </div>
                   <div className="user-card-right">
-                    <StatusDot status={user.status_aktif} />
                     <div className="user-card-actions">
-                      <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                        <EditIcon /> Edit
+                      <button onClick={() => openEdit(user)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                        <EditIcon />
                       </button>
                       {canDelete && (
-                        <button onClick={() => openDelete(user)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                          <TrashIcon /> Hapus
+                        <button onClick={() => openDelete(user)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                          <TrashIcon />
                         </button>
                       )}
                     </div>
