@@ -75,9 +75,21 @@ export default function DriverDashboard() {
       try {
         const data = await apiFetch('/api/siklus')
         setSiklusList(data || [])
-        if (data && data.length > 0) setSelectedSiklusId(data[0].siklus_id)
+        if (data && data.length > 0) {
+          setSelectedSiklusId(data[0].siklus_id)
+        } else {
+          // Tidak ada siklus, fetch profile saja
+          try {
+            const profileData = await apiFetch('/api/driver/me')
+            setProfile(profileData)
+          } catch {
+            setError('Gagal memuat data profil')
+          }
+          setIsLoading(false)
+        }
       } catch {
         setError('Gagal memuat data siklus')
+        setIsLoading(false)
       }
     }
     fetchSiklus()
@@ -124,6 +136,7 @@ export default function DriverDashboard() {
   const periode = ranking?.periode_terakhir
   const score   = periode ? parseFloat(String(periode.skor_total)) : null
   const isAktif = profile.status_aktif === 'aktif'
+  const noSiklus = siklusList.length === 0
 
   const infoFields = [
     {
@@ -295,6 +308,24 @@ export default function DriverDashboard() {
         </div>
 
         {/* ── Performance Section ───────────────────────────────── */}
+        {noSiklus ? (
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: 20,
+              padding: '40px 28px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+              border: '1px solid #f1f5f9',
+              textAlign: 'center',
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#94a3b8" width={48} height={48} style={{ marginBottom: 12 }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            <p style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: '#374151' }}>Belum Ada Siklus Penilaian</p>
+            <p style={{ margin: 0, fontSize: 14, color: '#94a3b8' }}>Siklus penilaian belum dibuat oleh admin. Silakan tunggu informasi lebih lanjut.</p>
+          </div>
+        ) : (
         <div
           style={{
             background: '#fff',
@@ -432,6 +463,7 @@ export default function DriverDashboard() {
             </div>
           )}
         </div>
+        )}
 
       </div>
     </div>
