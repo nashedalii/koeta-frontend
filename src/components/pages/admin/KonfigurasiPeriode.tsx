@@ -320,9 +320,9 @@ export default function KonfigurasiPenilaian() {
                           {isFuture ? (
                             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Belum dimulai</span>
                           ) : isAktif ? (
-                            <span className="status-badge status-aktif">🟢 Aktif</span>
+                            <span className="status-badge status-aktif">● Aktif</span>
                           ) : (
-                            <span className="status-badge status-nonaktif">⚫ Tidak Aktif</span>
+                            <span className="status-badge status-nonaktif">○ Tidak Aktif</span>
                           )}
                         </td>
                         <td>
@@ -449,14 +449,14 @@ export default function KonfigurasiPenilaian() {
                         </span>
                       </td>
                       <td style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <button onClick={() => openDetail(s)} className="btn-edit">📋 Detail</button>
+                        <button onClick={() => openDetail(s)} className="btn-edit">Detail</button>
                         {s.status_display === 'tertunda' && (
                           <button onClick={() => setConfirmActivate(s)} disabled={activating} className="btn-edit" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>
                             ▶ Aktifkan
                           </button>
                         )}
                         {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (
-                          <button onClick={() => setConfirmDelete(s)} className="btn-delete">🗑️ Hapus</button>
+                          <button onClick={() => setConfirmDelete(s)} className="btn-delete">Hapus</button>
                         )}
                       </td>
                     </tr>
@@ -472,7 +472,6 @@ export default function KonfigurasiPenilaian() {
         {confirmDelete && (
           <div className="modal-overlay" onClick={() => setConfirmDelete(null)}>
             <div className="confirm-modal" onClick={e => e.stopPropagation()}>
-              <div className="confirm-modal-icon">🗑️</div>
               <h3 className="confirm-modal-title">Hapus Siklus?</h3>
               <p className="confirm-modal-desc">
                 Siklus <strong>{confirmDelete.nama_siklus}</strong> beserta semua periode dan bobot di dalamnya akan dihapus permanen. Data tidak dapat dikembalikan.
@@ -515,7 +514,7 @@ export default function KonfigurasiPenilaian() {
             <div className="modal-content" onClick={e => e.stopPropagation()}>
               <div className="modal-header">
                 <h2>Buat Siklus Baru</h2>
-                <button onClick={() => setShowCreateModal(false)} className="modal-close">✖️</button>
+                <button onClick={() => setShowCreateModal(false)} className="modal-close">✕</button>
               </div>
 
               <div className="modal-body">
@@ -526,6 +525,7 @@ export default function KonfigurasiPenilaian() {
                       type="date"
                       value={form.tanggal_mulai}
                       onChange={e => setForm({ ...form, tanggal_mulai: e.target.value })}
+                      min={getToday()}
                       className="form-input"
                     />
                   </div>
@@ -535,6 +535,7 @@ export default function KonfigurasiPenilaian() {
                       type="date"
                       value={form.tanggal_selesai}
                       onChange={e => setForm({ ...form, tanggal_selesai: e.target.value })}
+                      min={form.tanggal_mulai || getToday()}
                       className="form-input"
                     />
                   </div>
@@ -567,7 +568,7 @@ export default function KonfigurasiPenilaian() {
                 {/* End date not last day of month warning */}
                 {isNotLastDayOfMonth && !overlapSiklus && (
                   <div style={{ background: '#fffbeb', border: '1.5px solid #fcd34d', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.85rem', color: '#92400e', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: 16, flexShrink: 0 }}>⚠️</span>
+                    <span style={{ fontSize: 16, flexShrink: 0 }}>!</span>
                     <span>
                       Tanggal selesai bukan akhir bulan. Sistem akan otomatis menyesuaikan tanggal selesai periode terakhir ke hari terakhir bulan tersebut.
                     </span>
@@ -581,7 +582,7 @@ export default function KonfigurasiPenilaian() {
                   const adjusted = `${lastDay.getFullYear()}-${String(lastDay.getMonth() + 1).padStart(2,'0')}-${String(lastDay.getDate()).padStart(2,'0')}`
                   return (
                     <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '0.75rem', fontSize: '0.85rem', color: '#16a34a' }}>
-                      ✅ Akan membuat periode bulanan dari <strong>{formatTanggal(form.tanggal_mulai)}</strong> hingga <strong>{formatTanggal(adjusted)}</strong>
+                      ✓ Akan membuat periode bulanan dari <strong>{formatTanggal(form.tanggal_mulai)}</strong> hingga <strong>{formatTanggal(adjusted)}</strong>
                     </div>
                   )
                 })()}

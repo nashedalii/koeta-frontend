@@ -182,12 +182,12 @@ export default function KonfigurasiPenilaian() {
   const hasEmptyNames = indikators.some(ind => !ind.nama.trim())
 
   const getStatusMessage = () => {
-    if (indikators.length < 3) return '⚠️ Indikator minimal 3'
-    if (hasEmptyNames) return '⚠️ Ada nama indikator yang kosong'
-    if (hasLowBobot) return '⚠️ Ada bobot kurang dari 5%'
-    if (totalBobot === 100) return '✅ Siap disimpan'
-    if (totalBobot > 100) return '❌ Melebihi 100%'
-    return '⚠️ Belum mencapai 100%'
+    if (indikators.length < 3) return 'Indikator minimal 3'
+    if (hasEmptyNames) return 'Ada nama indikator yang kosong'
+    if (hasLowBobot) return 'Ada bobot kurang dari 5%'
+    if (totalBobot === 100) return '✓ Siap disimpan'
+    if (totalBobot > 100) return '✕ Melebihi 100%'
+    return 'Belum mencapai 100%'
   }
 
   const getStatusClass = () => {
@@ -222,7 +222,7 @@ export default function KonfigurasiPenilaian() {
     if (indikators.length > 3) {
       setIndikators(prev => prev.filter(ind => ind.id !== id))
     } else {
-      showToast('error', '⚠️ Jumlah indikator minimal 3')
+      showToast('error', 'Jumlah indikator minimal 3')
     }
   }
 
@@ -241,19 +241,19 @@ export default function KonfigurasiPenilaian() {
   const handleSave = async () => {
     if (!selectedSiklusId) return
     if (indikators.length < 3) {
-      showToast('error', '⚠️ Jumlah indikator minimal 3')
+      showToast('error', 'Jumlah indikator minimal 3')
       return
     }
     if (hasEmptyNames) {
-      showToast('error', '⚠️ Semua indikator harus memiliki nama!')
+      showToast('error', 'Semua indikator harus memiliki nama!')
       return
     }
     if (hasLowBobot) {
-      showToast('error', '⚠️ Setiap indikator harus memiliki bobot minimal 5%!')
+      showToast('error', 'Setiap indikator harus memiliki bobot minimal 5%!')
       return
     }
     if (totalBobot !== 100) {
-      showToast('error', '⚠️ Total bobot harus 100% untuk menyimpan konfigurasi!')
+      showToast('error', 'Total bobot harus 100% untuk menyimpan konfigurasi!')
       return
     }
 
@@ -288,9 +288,9 @@ export default function KonfigurasiPenilaian() {
 
       // Show appropriate message based on activation status
       if (result.siklus_activated) {
-        showToast('success', '✅ Bobot berhasil disimpan. Siklus otomatis diaktifkan!')
+        showToast('success', 'Bobot berhasil disimpan. Siklus otomatis diaktifkan!')
       } else {
-        showToast('success', '✅ Bobot berhasil disimpan')
+        showToast('success', 'Bobot berhasil disimpan')
       }
     } catch (err: any) {
       showToast('error', err.message || 'Gagal menyimpan konfigurasi')
@@ -415,7 +415,6 @@ export default function KonfigurasiPenilaian() {
         {/* Locked Banner (penilaian sudah ada) */}
         {isLocked && (
           <div className="locked-banner">
-            <span>🔒</span>
             <span>Bobot tidak dapat diubah karena sudah ada penilaian yang disubmit dalam siklus ini.</span>
           </div>
         )}
@@ -447,7 +446,6 @@ export default function KonfigurasiPenilaian() {
         {/* Siklus Started Banner */}
         {isSiklusStarted && !isLocked && (
           <div className="locked-banner">
-            <span>🔒</span>
             <span>
               Siklus <strong>{selectedSiklus?.nama_siklus}</strong> sudah{' '}
               <strong>
@@ -543,7 +541,7 @@ export default function KonfigurasiPenilaian() {
                             placeholder="Nama indikator"
                           />
                           {!indikator.nama.trim() && (
-                            <span className="name-warning">⚠️ Wajib diisi</span>
+                            <span className="name-warning">* Wajib diisi</span>
                           )}
                         </div>
                       </td>
@@ -559,7 +557,7 @@ export default function KonfigurasiPenilaian() {
                             placeholder="0"
                           />
                           {indikator.bobot > 0 && indikator.bobot < 5 && (
-                            <span className="bobot-warning">⚠️ Min 5%</span>
+                            <span className="bobot-warning">* Min 5%</span>
                           )}
                         </div>
                       </td>
@@ -570,7 +568,7 @@ export default function KonfigurasiPenilaian() {
                             className="btn-delete-indicator"
                             title="Hapus indikator"
                           >
-                            🗑️
+                            ✕
                           </button>
                         )}
                       </td>
@@ -580,7 +578,7 @@ export default function KonfigurasiPenilaian() {
                     <td colSpan={3} className="text-right font-bold">
                       <span style={{ marginRight: 8 }}>Total Bobot</span>
                       <span className={`total-badge ${totalBobot === 100 ? 'valid' : 'invalid'}`}>
-                        {totalBobot}% {totalBobot === 100 ? '✅' : '⚠️'}
+                        {totalBobot}% {totalBobot === 100 ? '✓' : '!'}
                       </span>
                     </td>
                     <td></td>
