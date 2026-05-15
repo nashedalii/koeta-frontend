@@ -220,13 +220,13 @@ export default function KonfigurasiPenilaian() {
       <div className="dashboard-container">
         <div className="dashboard-content">
           {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-            <button onClick={() => setSelectedSiklus(null)} className="btn-cancel">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            <button onClick={() => setSelectedSiklus(null)} className="btn-cancel" style={{ alignSelf: 'flex-start' }}>
               ← Kembali
             </button>
             <div>
-              <h1 className="page-title" style={{ margin: 0 }}>{selectedSiklus.nama_siklus}</h1>
-              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>
+              <h1 className="page-title" style={{ margin: 0, fontSize: '1.25rem' }}>{selectedSiklus.nama_siklus}</h1>
+              <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '0.85rem' }}>
                 {formatTanggal(selectedSiklus.tanggal_mulai)} – {formatTanggal(selectedSiklus.tanggal_selesai)}
               </p>
             </div>
@@ -243,17 +243,15 @@ export default function KonfigurasiPenilaian() {
                   <div key={p.periode_id} className="user-card" style={{ background: isAktif ? '#f0fdf4' : undefined }}>
                     <div className="user-card-left">
                       <div className="user-card-info">
-                        <div className="user-card-name" style={{ color: isAktif ? '#16a34a' : isFuture ? '#94a3b8' : '#1e293b' }}>
+                        <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 6, color: isAktif ? '#16a34a' : isFuture ? '#94a3b8' : '#1e293b' }}>
                           {p.nama_periode}
-                          {p.is_override && <span style={{ marginLeft: 6, fontSize: '0.7rem', color: '#f59e0b' }}>(override)</span>}
-                        </div>
-                        <div className="user-card-meta">
+                          {p.is_override && <span style={{ fontSize: '0.65rem', color: '#f59e0b' }}>(override)</span>}
                           {isFuture ? (
-                            <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Belum dimulai</span>
+                            <span style={{ color: '#94a3b8', fontSize: '0.65rem', fontWeight: 500 }}>Belum dimulai</span>
                           ) : isAktif ? (
-                            <span className="status-badge status-aktif" style={{ fontSize: '0.7rem' }}>🟢 Aktif</span>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#16a34a', flexShrink: 0 }} />
                           ) : (
-                            <span className="status-badge status-nonaktif" style={{ fontSize: '0.7rem' }}>⚫ Tidak Aktif</span>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#94a3b8', flexShrink: 0 }} />
                           )}
                         </div>
                         <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 2 }}>
@@ -264,15 +262,15 @@ export default function KonfigurasiPenilaian() {
                     <div className="user-card-right">
                       <div className="user-card-actions">
                         {isFuture ? (
-                          <button className="btn-edit" disabled style={{ opacity: 0.4, cursor: 'not-allowed', padding: '5px 10px', fontSize: '0.78rem' }}>
+                          <button className="btn-edit" disabled style={{ opacity: 0.4, cursor: 'not-allowed', padding: '5px 10px', fontSize: '0.72rem' }}>
                             Aktifkan
                           </button>
                         ) : isAktif ? (
-                          <button onClick={() => handleToggleOverride(p)} className="btn-delete" style={{ padding: '5px 10px', fontSize: '0.78rem' }}>
+                          <button onClick={() => handleToggleOverride(p)} className="btn-delete" style={{ padding: '5px 8px', fontSize: '0.72rem' }}>
                             Nonaktifkan
                           </button>
                         ) : (
-                          <button onClick={() => handleToggleOverride(p)} className="btn-edit" style={{ padding: '5px 10px', fontSize: '0.78rem' }}>
+                          <button onClick={() => handleToggleOverride(p)} className="btn-edit" style={{ padding: '5px 10px', fontSize: '0.72rem' }}>
                             Aktifkan
                           </button>
                         )}
@@ -390,9 +388,11 @@ export default function KonfigurasiPenilaian() {
                 <div key={s.siklus_id} className="user-card">
                   <div className="user-card-left">
                     <div className="user-card-info">
-                      <div className="user-card-name">{s.nama_siklus}</div>
+                      <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        {s.nama_siklus}
+                        <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: '0.6rem', fontWeight: 600, color: cfg.color, background: cfg.bg }}>{cfg.label}</span>
+                      </div>
                       <div className="user-card-meta">
-                        <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: '0.65rem', fontWeight: 600, color: cfg.color, background: cfg.bg }}>{cfg.label}</span>
                         <span className="user-card-hp">{s.jumlah_periode} bulan</span>
                       </div>
                       <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 2 }}>
@@ -400,19 +400,19 @@ export default function KonfigurasiPenilaian() {
                       </div>
                     </div>
                   </div>
-                  <div className="user-card-right">
-                    <div className="user-card-actions">
-                      <button onClick={() => openDetail(s)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                        📋 Detail
+                  <div className="user-card-right" style={{ flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+                    {s.status_display === 'tertunda' && (
+                      <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '5px 10px', fontSize: '0.75rem', background: '#f59e0b', color: '#fff', border: 'none', whiteSpace: 'nowrap' }}>
+                        ▶ Aktifkan
                       </button>
-                      {s.status_display === 'tertunda' && (
-                        <button onClick={() => handleActivate(s)} disabled={activating} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem', background: '#f59e0b', color: '#fff', border: 'none' }}>
-                          ▶ Aktifkan
-                        </button>
-                      )}
+                    )}
+                    <div className="user-card-actions">
+                      <button onClick={() => openDetail(s)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" width={14} height={14}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+                      </button>
                       {(s.status_display === 'belum_dimulai' || s.status_display === 'tertunda') && (
-                        <button onClick={() => setConfirmDelete(s)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: '0.78rem' }}>
-                          🗑️ Hapus
+                        <button onClick={() => setConfirmDelete(s)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px', fontSize: '0.85rem' }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" width={14} height={14}><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                         </button>
                       )}
                     </div>
