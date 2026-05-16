@@ -661,33 +661,36 @@ export default function ValidasiDataPetugas() {
                     {/* Detail Indikator */}
                     <div className="preview-section">
                       <h3 style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6b7280', marginBottom: 10 }}>Detail Indikator</h3>
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                      <div style={{ overflowX: 'auto', margin: '0 -14px', padding: '0 14px' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 320 }}>
                         <thead>
                           <tr style={{ background: '#f1f5f9' }}>
-                            {['Indikator', 'Bobot', 'Nilai', 'Kontribusi'].map(h => (
-                              <th key={h} style={{ padding: '8px 12px', textAlign: h === 'Indikator' ? 'left' : 'center', fontWeight: 600, color: '#374151', fontSize: 12 }}>{h}</th>
-                            ))}
+                            <th style={{ padding: '8px 8px', textAlign: 'left', fontWeight: 600, color: '#374151', fontSize: 12 }}>Indikator</th>
+                            <th style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 600, color: '#374151', fontSize: 12 }}>Bobot</th>
+                            <th style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 600, color: '#374151', fontSize: 12 }}>Nilai</th>
+                            <th style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 600, color: '#374151', fontSize: 12 }}>Kontribusi</th>
                           </tr>
                         </thead>
                         <tbody>
                           {detailData.details.map(d => (
                             <tr key={d.penilaian_detail_id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                              <td style={{ padding: '8px 12px', color: '#374151' }}>{d.nama_bobot}</td>
-                              <td style={{ padding: '8px 12px', textAlign: 'center', color: '#6b7280' }}>{d.persentase_bobot}%</td>
-                              <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600 }}>{Number(d.nilai).toFixed(2)}</td>
-                              <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: '#2563eb' }}>
+                              <td style={{ padding: '8px 8px', color: '#111827', fontWeight: 600 }}>{d.nama_bobot}</td>
+                              <td style={{ padding: '8px 6px', textAlign: 'center', color: '#111827', fontWeight: 600 }}>{Number(d.persentase_bobot).toFixed(0)}%</td>
+                              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 600, color: '#111827' }}>{Number(d.nilai).toFixed(0)}</td>
+                              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 600, color: '#2563eb' }}>
                                 {((Number(d.nilai) * Number(d.persentase_bobot)) / 100).toFixed(2)}
                               </td>
                             </tr>
                           ))}
                           <tr style={{ background: '#f8fafc', borderTop: '2px solid #e5e7eb' }}>
-                            <td colSpan={3} style={{ padding: '10px 12px', fontWeight: 700, color: '#111827' }}>Skor Total</td>
-                            <td style={{ padding: '10px 12px', textAlign: 'center', fontWeight: 800, fontSize: 16, color: '#2563eb' }}>
+                            <td colSpan={3} style={{ padding: '10px 8px', fontWeight: 700, color: '#111827' }}>Skor Total</td>
+                            <td style={{ padding: '10px 6px', textAlign: 'center', fontWeight: 800, fontSize: 16, color: '#2563eb' }}>
                               {Number(detailData.penilaian.skor_total).toFixed(2)}
                             </td>
                           </tr>
                         </tbody>
                       </table>
+                      </div>
                     </div>
 
                     {/* Catatan Petugas */}
@@ -733,14 +736,14 @@ export default function ValidasiDataPetugas() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {detailData.log.map(l => (
                             <div key={l.validasi_log_id} style={{
-                              display: 'flex', alignItems: 'flex-start', gap: 12,
+                              display: 'flex', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap',
                               padding: '10px 14px', background: '#f8fafc', borderRadius: 10,
                               border: '1px solid #e5e7eb',
                             }}>
                               <StatusBadge status={l.aksi} />
-                              <div style={{ flex: 1 }}>
+                              <div style={{ flex: 1, minWidth: 0 }}>
                                 <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#111827' }}>{l.nama_admin}</p>
-                                {l.alasan && <p style={{ margin: '3px 0 0', fontSize: 12, color: '#dc2626' }}>{l.alasan}</p>}
+                                {l.alasan && <p style={{ margin: '3px 0 0', fontSize: 12, color: '#dc2626', wordBreak: 'break-word' }}>{l.alasan}</p>}
                               </div>
                               <span style={{ fontSize: 11, color: '#9ca3af', whiteSpace: 'nowrap' }}>{fmtDateTime(l.created_at)}</span>
                             </div>
@@ -754,14 +757,15 @@ export default function ValidasiDataPetugas() {
 
               {/* Footer actions */}
               {detailData && !isSuperAdmin && (
-                <div className="modal-footer">
+                <div className="modal-footer" style={{ display: 'flex', gap: 10 }}>
                   {detailData.penilaian.status_validasi === 'pending' && (
                     <>
-                      <button className="btn btn-danger-outline" onClick={() => openReject(false)} disabled={isSubmitting}>
+                      <button className="btn btn-danger-outline" onClick={() => openReject(false)} disabled={isSubmitting}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                         <XIcon /> Tolak
                       </button>
                       <button className="btn btn-primary" onClick={handleApprove} disabled={isSubmitting}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                         <CheckIcon /> {isSubmitting ? 'Memproses...' : 'Setujui'}
                       </button>
                     </>
@@ -769,7 +773,7 @@ export default function ValidasiDataPetugas() {
                   {detailData.penilaian.status_validasi === 'approved' && (
                     <button onClick={() => openReject(true)} disabled={isSubmitting}
                       style={{
-                        display: 'flex', alignItems: 'center', gap: 6,
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                         padding: '9px 18px', borderRadius: 10, border: '1.5px solid #fca5a5',
                         background: '#fff', color: '#dc2626', fontWeight: 600, fontSize: 13, cursor: 'pointer',
                         transition: 'background 0.15s',

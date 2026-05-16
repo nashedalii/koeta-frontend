@@ -2641,13 +2641,14 @@ body {
   }
 
   .modal-footer {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;
+    gap: 10px;
   }
 
   .modal-footer .btn-cancel,
   .modal-footer .btn-save {
-    width: 100%;
+    width: auto;
+    flex: 1;
     justify-content: center;
   }
 
