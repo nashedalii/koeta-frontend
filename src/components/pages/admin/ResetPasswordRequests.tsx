@@ -65,6 +65,12 @@ export default function ResetPasswordRequests() {
   const [resetting, setResetting] = useState<number | null>(null)
   const [result, setResult] = useState<ResetResult | null>(null)
   const [copied, setCopied] = useState(false)
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  const showToast = (type: 'success' | 'error', text: string) => {
+    setToast({ type, text })
+    setTimeout(() => setToast(null), 4000)
+  }
 
   const fetchRequests = useCallback(async () => {
     try {
@@ -88,7 +94,7 @@ export default function ResetPasswordRequests() {
       setCopied(false)
       fetchRequests()
     } catch (err: any) {
-      alert(err.message ?? 'Gagal mereset password')
+      showToast('error', err.message ?? 'Gagal mereset password')
     } finally {
       setResetting(null)
     }
@@ -361,6 +367,32 @@ export default function ResetPasswordRequests() {
           .reset-cards-mobile  { display: flex; }
         }
       `}</style>
+
+      {/* ── Toast ── */}
+      {toast && (
+        <div style={{
+          position: 'fixed', top: 24, right: 24, zIndex: 99999,
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: '14px 20px', borderRadius: 14,
+          background: toast.type === 'success' ? '#064e3b' : '#7f1d1d',
+          color: '#fff', fontSize: 14, fontWeight: 500,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+          maxWidth: 380, lineHeight: 1.4,
+        }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+            background: toast.type === 'success' ? '#065f46' : '#991b1b',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15,
+          }}>
+            {toast.type === 'success' ? '✓' : '✕'}
+          </div>
+          <span style={{ flex: 1 }}>{toast.text}</span>
+          <button onClick={() => setToast(null)} style={{
+            background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)',
+            cursor: 'pointer', fontSize: 16, padding: 0, lineHeight: 1, flexShrink: 0,
+          }}>✕</button>
+        </div>
+      )}
     </div>
   )
 }

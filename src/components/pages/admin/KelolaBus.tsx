@@ -97,6 +97,12 @@ export default function KelolaBus() {
   const [selectedBus, setSelectedBus]       = useState<BusData | null>(null)
   const [formData, setFormData]             = useState<FormData>(EMPTY_FORM)
   const [saving, setSaving]                 = useState(false)
+  const [toast, setToast]                   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  const showToast = (type: 'success' | 'error', text: string) => {
+    setToast({ type, text })
+    setTimeout(() => setToast(null), 4000)
+  }
 
   const fetchBuses = async () => {
     try {
@@ -145,7 +151,7 @@ export default function KelolaBus() {
 
   const handleSave = async () => {
     if (!formData.kode_bus || !formData.nopol || (isSuperAdmin && !formData.armada_id)) {
-      alert('Kode bus, nopol, dan armada wajib diisi'); return
+      showToast('error', 'Kode bus, nopol, dan armada wajib diisi'); return
     }
     setSaving(true)
     try {
@@ -159,7 +165,7 @@ export default function KelolaBus() {
       await fetchBuses()
       setShowModal(false)
     } catch (err: any) {
-      alert(err.message ?? 'Gagal menyimpan data bus')
+      showToast('error', err.message ?? 'Gagal menyimpan data bus')
     } finally { setSaving(false) }
   }
 
@@ -173,7 +179,7 @@ export default function KelolaBus() {
       await fetchBuses()
       setShowDeleteModal(false)
     } catch (err: any) {
-      alert(err.message ?? 'Gagal menghapus bus')
+      showToast('error', err.message ?? 'Gagal menghapus bus')
     } finally { setSaving(false) }
   }
 
@@ -374,6 +380,32 @@ export default function KelolaBus() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ── Toast ── */}
+        {toast && (
+          <div style={{
+            position: 'fixed', top: 24, right: 24, zIndex: 99999,
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '14px 20px', borderRadius: 14,
+            background: toast.type === 'success' ? '#064e3b' : '#7f1d1d',
+            color: '#fff', fontSize: 14, fontWeight: 500,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+            maxWidth: 380, lineHeight: 1.4,
+          }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+              background: toast.type === 'success' ? '#065f46' : '#991b1b',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15,
+            }}>
+              {toast.type === 'success' ? '✓' : '✕'}
+            </div>
+            <span style={{ flex: 1 }}>{toast.text}</span>
+            <button onClick={() => setToast(null)} style={{
+              background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)',
+              cursor: 'pointer', fontSize: 16, padding: 0, lineHeight: 1, flexShrink: 0,
+            }}>✕</button>
           </div>
         )}
       </div>
