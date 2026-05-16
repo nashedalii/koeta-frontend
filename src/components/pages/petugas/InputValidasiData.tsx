@@ -394,10 +394,10 @@ export default function InputValidasiData() {
   // ── Status badge ──────────────────────────────────────────────────────
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'approved':  return { className: 'status-badge approved',   text: '✓ Disetujui' }
-      case 'pending':   return { className: 'status-badge pending',    text: '⏳ Pending' }
-      case 'rejected':  return { className: 'status-badge rejected',   text: '✕ Ditolak' }
-      default:          return { className: 'status-badge not-filled', text: '⚠️ Belum Diisi' }
+      case 'approved':  return { className: 'status-badge approved',   text: '● Disetujui' }
+      case 'pending':   return { className: 'status-badge pending',    text: '● Pending' }
+      case 'rejected':  return { className: 'status-badge rejected',   text: '● Ditolak' }
+      default:          return { className: 'status-badge not-filled', text: '○ Belum Diisi' }
     }
   }
 
@@ -440,69 +440,57 @@ export default function InputValidasiData() {
 
         {!periodeAktif && (
           <div className="reminder-banner">
-            <span>⚠️</span>
             <span>Tidak ada periode aktif. Hubungi admin untuk mengaktifkan periode penilaian.</span>
           </div>
         )}
 
         {periodeAktif && bobotList.length === 0 && (
           <div className="reminder-banner">
-            <span>⚠️</span>
             <span>Bobot penilaian belum dikonfigurasi oleh admin untuk siklus ini.</span>
           </div>
         )}
 
         {/* Summary & Controls */}
         <div className="input-controls">
-          <div className="input-summary">
-            <div className="summary-item approved">
-              <span className="summary-icon">✓</span>
-              <div>
-                <p className="summary-label">Disetujui</p>
-                <p className="summary-value">{drivers.filter(d => getDriverStatus(d.id) === 'approved').length}</p>
-              </div>
-            </div>
-            <div className="summary-item pending">
-              <span className="summary-icon">⏳</span>
-              <div>
-                <p className="summary-label">Pending</p>
-                <p className="summary-value">{drivers.filter(d => getDriverStatus(d.id) === 'pending').length}</p>
-              </div>
-            </div>
-            <div className="summary-item not-filled">
-              <span className="summary-icon">⚠️</span>
-              <div>
-                <p className="summary-label">Belum Diisi</p>
-                <p className="summary-value">{drivers.filter(d => getDriverStatus(d.id) === 'belum-diisi').length}</p>
-              </div>
-            </div>
-            <div className="summary-item rejected">
-              <span className="summary-icon">✕</span>
-              <div>
-                <p className="summary-label">Ditolak</p>
-                <p className="summary-value">{drivers.filter(d => getDriverStatus(d.id) === 'rejected').length}</p>
-              </div>
-            </div>
+          <div className="validasi-summary-grid" style={{ marginBottom: 16 }}>
+            {([
+              { key: 'approved', label: 'Disetujui', color: '#059669', bg: '#d1fae5', gradient: 'linear-gradient(135deg,#f0fdf4,#d1fae5)', icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> },
+              { key: 'pending', label: 'Pending', color: '#d97706', bg: '#fef3c7', gradient: 'linear-gradient(135deg,#fffbeb,#fef3c7)', icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> },
+              { key: 'belum-diisi', label: 'Belum Diisi', color: '#dc2626', bg: '#fee2e2', gradient: 'linear-gradient(135deg,#fef2f2,#fee2e2)', icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg> },
+              { key: 'rejected', label: 'Ditolak', color: '#6b7280', bg: '#f3f4f6', gradient: 'linear-gradient(135deg,#f9fafb,#f3f4f6)', icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg> },
+            ] as const).map(item => {
+              const count = item.key === 'belum-diisi'
+                ? drivers.filter(d => getDriverStatus(d.id) === 'belum-diisi').length
+                : drivers.filter(d => getDriverStatus(d.id) === item.key).length
+              const isActive = statusFilter === item.key
+              return (
+                <div key={item.key} onClick={() => setStatusFilter(isActive ? 'all' : item.key)}
+                  style={{
+                    background: '#fff', borderRadius: 16, padding: '16px 18px',
+                    display: 'flex', alignItems: 'center', gap: 14,
+                    cursor: 'pointer', border: `2px solid ${isActive ? item.color : 'transparent'}`,
+                    boxShadow: isActive ? `0 0 0 3px ${item.bg}` : '0 2px 12px rgba(0,0,0,0.08)',
+                    transition: 'all 0.2s',
+                  }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: item.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color, flexShrink: 0 }}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>{item.label}</p>
+                    <p style={{ fontSize: 26, fontWeight: 800, color: item.color, margin: '2px 0 0', fontVariantNumeric: 'tabular-nums' }}>{count}</p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
           <div className="input-filters">
             <input
               className="search-input"
-              placeholder="🔍 Cari driver..."
+              placeholder="Cari driver..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
-            <select
-              className="filter-select"
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
-            >
-              <option value="all">Semua Status</option>
-              <option value="approved">Disetujui</option>
-              <option value="pending">Pending</option>
-              <option value="rejected">Ditolak</option>
-              <option value="belum-diisi">Belum Diisi</option>
-            </select>
           </div>
         </div>
 
@@ -517,7 +505,7 @@ export default function InputValidasiData() {
             color: '#9a3412', fontSize: '0.875rem', fontWeight: 500,
             boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
           }}>
-            <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>⚠️</span>
+            <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>!</span>
             <span style={{ flex: 1 }}>{noBusWarning}</span>
             <button onClick={() => setNoBusWarning(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9a3412', fontSize: '1rem', lineHeight: 1, flexShrink: 0 }}>✕</button>
           </div>
@@ -531,51 +519,50 @@ export default function InputValidasiData() {
             const penilaian = getPenilaianDriver(driver.id)
 
             return (
-              <div key={driver.id} className="driver-card input-card">
-                <div className="driver-card-header">
-                  <div>
-                    <h3 className="driver-name">{driver.nama}</h3>
-                    <p className="muted small">Kernet: {driver.nama_kernet || '-'}</p>
+              <div key={driver.id} className="driver-card input-card" style={{ padding: '12px 14px' }}>
+                <div className="driver-card-header" style={{ marginBottom: 0 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <h3 className="driver-name" style={{ margin: 0, fontSize: '0.9rem' }}>{driver.nama}</h3>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#64748b' }}>
+                      {driver.kode_bus ? `${driver.kode_bus} — ${driver.nopol}` : 'Bus belum diassign'}
+                    </p>
                   </div>
                   <span className="armada-badge">{driver.kode_armada}</span>
                 </div>
 
-                <div className="driver-card-body">
-                  <p className="muted small">
-                    Bus: <strong>{driver.kode_bus ? `${driver.kode_bus} — ${driver.nopol}` : '—'}</strong>
-                  </p>
-                  <div className="status-row">
+                <div className="driver-card-body" style={{ gap: 0, padding: 0 }}>
+                  <div style={{ marginTop: 4 }}>
                     <span className={badge.className}>{badge.text}</span>
                     {penilaian && (
-                      <span className="skor-preview">Skor: <strong>{penilaian.skor_total}</strong></span>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: '#111827' }}>Skor: <strong>{penilaian.skor_total}</strong></p>
                     )}
                   </div>
                   {status === 'rejected' && penilaian?.note_validasi && (
-                    <p className="rejected-note">Alasan: {penilaian.note_validasi}</p>
+                    <p className="rejected-note" style={{ margin: '2px 0 0', fontSize: '0.7rem' }}>Alasan: {penilaian.note_validasi}</p>
                   )}
 
-                  <div className="card-actions">
+                  <div className="card-actions" style={{ marginTop: 6, gap: 6, display: 'flex', flexDirection: 'row', flexWrap: 'nowrap' }}>
                     {status === 'belum-diisi' && periodeAktif && bobotList.length > 0 && (
                       <button className="btn btn-primary" onClick={() => handleOpenInput(driver)}>
-                        📝 Input Data
+                        + Input
                       </button>
                     )}
                     {(status === 'pending' || status === 'rejected') && (
                       <>
-                        <button className="btn btn-secondary" onClick={() => handleOpenEdit(driver)}>
-                          ✏️ Edit
+                        <button className="btn btn-secondary" onClick={() => handleOpenEdit(driver)} title="Edit">
+                          ✎
                         </button>
-                        <button className="btn btn-outline" onClick={() => handleOpenDetail(driver)}>
-                          👁️ Lihat
+                        <button className="btn btn-outline" onClick={() => handleOpenDetail(driver)} title="Detail">
+                          ◉
                         </button>
-                        <button className="btn btn-danger-outline" onClick={() => handleDelete(driver)}>
-                          🗑️
+                        <button className="btn btn-danger-outline" onClick={() => handleDelete(driver)} title="Hapus">
+                          🗑
                         </button>
                       </>
                     )}
                     {status === 'approved' && (
-                      <button className="btn btn-outline" onClick={() => handleOpenDetail(driver)}>
-                        👁️ Lihat Detail
+                      <button className="btn btn-outline" onClick={() => handleOpenDetail(driver)} title="Detail">
+                        ◉ Detail
                       </button>
                     )}
                   </div>
@@ -587,7 +574,6 @@ export default function InputValidasiData() {
 
         {filteredDrivers.length === 0 && (
           <div className="empty-state">
-            <div className="empty-icon">📋</div>
             <h3>Tidak ada data ditemukan</h3>
             <p>Coba ubah filter atau pencarian</p>
           </div>
@@ -656,10 +642,10 @@ export default function InputValidasiData() {
                             placeholder="0–100"
                           />
                           {isEmpty && (
-                            <span className="field-warning">⚠️ {bobot.nama_bobot} belum diisi</span>
+                            <span className="field-warning">* {bobot.nama_bobot} belum diisi</span>
                           )}
                           {isInvalid && (
-                            <span className="field-warning">⚠️ Nilai harus antara 0 dan 100</span>
+                            <span className="field-warning">* Nilai harus antara 0 dan 100</span>
                           )}
                         </div>
                       )
@@ -819,7 +805,7 @@ export default function InputValidasiData() {
                 )}
 
                 <div className="preview-warning">
-                  <strong>⚠️ Perhatian:</strong> Data yang sudah disubmit akan menunggu persetujuan Admin.
+                  <strong>Perhatian:</strong> Data yang sudah disubmit akan menunggu persetujuan Admin.
                   Pastikan semua data sudah benar.
                 </div>
               </div>
