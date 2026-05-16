@@ -186,8 +186,8 @@ export default function ValidasiDataPetugas() {
     setIsLoading(true); setError(null)
     try {
       const params = new URLSearchParams()
-      if (filterStatus !== 'all') params.set('status_validasi', filterStatus)
       if (filterPeriode !== 'all') params.set('periode_id', filterPeriode)
+      // Selalu fetch semua data (tanpa filter status) agar counts akurat
       const res = await fetch(`${apiBase}/api/validasi?${params}`, { headers: authHeader() })
       const data = await res.json()
       if (!res.ok) throw new Error(data.message || 'Gagal memuat data')
@@ -197,16 +197,17 @@ export default function ValidasiDataPetugas() {
     } finally {
       setIsLoading(false)
     }
-  }, [filterStatus, filterArmada, filterPeriode])
+  }, [filterArmada, filterPeriode])
 
   useEffect(() => { fetchList() }, [fetchList])
 
   const armadaList = Array.from(new Set(list.map(p => p.nama_armada))).sort()
 
   const filtered = list.filter(p => {
+    const matchStatus = filterStatus === 'all' || p.status_validasi === filterStatus
     const matchArmada = filterArmada === 'all' || p.nama_armada === filterArmada
     const matchSearch = p.nama_driver.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchArmada && matchSearch
+    return matchStatus && matchArmada && matchSearch
   })
 
   const counts = {
@@ -394,16 +395,6 @@ export default function ValidasiDataPetugas() {
             </select>
           </div>
           <div style={{ width: 1, height: 24, background: '#e5e7eb' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#6b7280' }}>Status:</span>
-            <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
-              style={{ border: '1.5px solid #e5e7eb', borderRadius: 8, padding: '5px 10px', fontSize: 13, color: '#1e293b', background: '#f9fafb', outline: 'none', cursor: 'pointer' }}>
-              <option value="all">Semua</option>
-              <option value="pending">Menunggu</option>
-              <option value="approved">Disetujui</option>
-              <option value="rejected">Ditolak</option>
-            </select>
-          </div>
           <span style={{ fontSize: 12, color: '#9ca3af', marginLeft: 'auto' }}>{filtered.length} data</span>
         </div>
 
@@ -636,17 +627,17 @@ export default function ValidasiDataPetugas() {
                           ['Periode', detailData.penilaian.nama_periode],
                           ['Tgl Input', fmtDateTime(detailData.penilaian.created_at)],
                         ].map(([label, val]) => (
-                          <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #e5e7eb', fontSize: 13 }}>
+                          <div key={label} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', padding: '7px 0', borderBottom: '1px solid #e5e7eb', fontSize: 13, gap: 8 }}>
                             <span style={{ color: '#6b7280' }}>{label}</span>
-                            <span style={{ fontWeight: 600, color: '#111827', textAlign: 'right', maxWidth: '60%' }}>{val}</span>
+                            <span style={{ fontWeight: 600, color: '#111827' }}>{val}</span>
                           </div>
                         ))}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #e5e7eb', fontSize: 13 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', padding: '7px 0', borderBottom: '1px solid #e5e7eb', fontSize: 13, gap: 8 }}>
                           <span style={{ color: '#6b7280' }}>Petugas Input</span>
                           <span style={{ fontWeight: 600, color: '#d97706' }}>{detailData.penilaian.nama_petugas_input}</span>
                         </div>
                         {detailData.penilaian.nama_admin_validasi && (
-                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 13 }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', padding: '7px 0', fontSize: 13, gap: 8 }}>
                             <span style={{ color: '#6b7280' }}>Divalidasi</span>
                             <span style={{ fontWeight: 600, color: '#2563eb' }}>{detailData.penilaian.nama_admin_validasi}</span>
                           </div>
