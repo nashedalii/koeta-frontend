@@ -7377,18 +7377,30 @@ body {
   border-radius: 12px;
   padding: 32px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  min-height: 600px;
+  min-height: 400px;
+  overflow: hidden;
 }
 
 .driver-visualisasi .chart-card {
   width: 100%;
-  height: 500px;
+  height: 400px;
   position: relative;
 }
 
 .driver-visualisasi .chart-card canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .driver-visualisasi .analytics-container {
+    padding: 16px;
+    min-height: 280px;
+  }
+
+  .driver-visualisasi .chart-card {
+    height: 280px;
+  }
 }
 
 /* Auto Notes Section */

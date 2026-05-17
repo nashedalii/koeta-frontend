@@ -121,7 +121,14 @@ export default function RankingPenilaian() {
   useEffect(() => {
     fetch(`${apiBase}/api/siklus`, { headers: authHeader() })
       .then(r => r.json())
-      .then(d => setSiklusList(d.siklus || d || []))
+      .then(d => {
+        const list = d.siklus || d || []
+        setSiklusList(list)
+        // Auto-select siklus yang sedang berjalan
+        const berjalan = list.find((s: any) => s.status_display === 'berjalan')
+        if (berjalan) setSelectedSiklus(berjalan.siklus_id)
+        else if (list.length > 0) setSelectedSiklus(list[0].siklus_id)
+      })
       .catch(() => {})
   }, [])
 
@@ -441,11 +448,8 @@ export default function RankingPenilaian() {
             {error && <div className="error-banner">{error}</div>}
 
             {!selectedSiklus && (
-              <div className="empty-state">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="#94a3b8" style={{ width: 52, height: 52, marginBottom: 12 }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                </svg>
-                <h3>Pilih Siklus</h3>
+              <div className="empty-state" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                <h3 style={{ color: 'rgba(255,255,255,0.9)' }}>Pilih Siklus</h3>
                 <p>Pilih siklus terlebih dahulu untuk melihat ranking</p>
               </div>
             )}
