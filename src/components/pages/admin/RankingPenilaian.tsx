@@ -272,90 +272,63 @@ export default function RankingPenilaian() {
               <button
                 onClick={() => { setDetailDriver(null); setDetailData(null) }}
                 style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'none', border: '1px solid #e2e8f0',
-                  borderRadius: 8, padding: '6px 14px',
-                  fontSize: '0.875rem', fontWeight: 500, color: '#475569',
-                  cursor: 'pointer', transition: 'all 150ms ease',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = '#f1f5f9'
-                  ;(e.currentTarget as HTMLButtonElement).style.color = '#0f172a'
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = 'none'
-                  ;(e.currentTarget as HTMLButtonElement).style.color = '#475569'
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  background: 'none', border: 'none',
+                  padding: '4px 0',
+                  fontSize: '0.8rem', fontWeight: 500, color: 'rgba(255,255,255,0.7)',
+                  cursor: 'pointer',
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" style={{ width: 16, height: 16 }}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" style={{ width: 14, height: 14 }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
-                Kembali ke Ranking
+                Kembali
               </button>
             </div>
 
             {/* Driver Hero Card */}
             <div style={{
               background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0ea5e9 100%)',
-              borderRadius: 16, padding: '28px 32px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              gap: 20, flexWrap: 'wrap',
+              borderRadius: 16, padding: '20px 24px',
+              display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+              gap: 16,
               boxShadow: '0 4px 24px rgba(15,23,42,0.18)',
             }}>
               {/* Left: identity */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-                {/* Avatar circle */}
-                <div style={{
-                  width: 64, height: 64, borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '2px solid rgba(255,255,255,0.25)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="rgba(255,255,255,0.8)" style={{ width: 32, height: 32 }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 style={{ margin: 0, color: '#fff', fontSize: '1.375rem', fontWeight: 700, lineHeight: 1.3 }}>
-                    {detailDriver.nama_driver}
-                  </h2>
-                  {detailDriver.nama_kernet && (
-                    <p style={{ margin: '3px 0 0', color: 'rgba(255,255,255,0.6)', fontSize: '0.8125rem' }}>
-                      Kernet: {detailDriver.nama_kernet}
-                    </p>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h2 style={{ margin: 0, color: '#fff', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3 }}>
+                  {detailDriver.nama_driver}
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.15)', color: '#fff',
+                    borderRadius: 6, padding: '2px 8px',
+                    fontSize: '0.75rem', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)',
+                  }}>{detailDriver.nama_armada}</span>
+                  {detailDriver.kode_bus && (
+                    <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem' }}>
+                      {detailDriver.kode_bus} / {detailDriver.nopol}
+                    </span>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
-                    <span style={{
-                      background: 'rgba(255,255,255,0.15)', color: '#fff',
-                      borderRadius: 6, padding: '3px 10px',
-                      fontSize: '0.8125rem', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)',
-                    }}>{detailDriver.nama_armada}</span>
-                    {detailDriver.kode_bus && (
-                      <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.8125rem' }}>
-                        {detailDriver.kode_bus} / {detailDriver.nopol}
-                      </span>
-                    )}
-                  </div>
                 </div>
               </div>
 
-              {/* Right: rank badge */}
+              {/* Right: rank + skor */}
               <div style={{ textAlign: 'center', flexShrink: 0 }}>
                 <div style={{
                   background: detailDriver.rank === 1 ? 'linear-gradient(135deg,#f59e0b,#d97706)'
                             : detailDriver.rank === 2 ? 'linear-gradient(135deg,#94a3b8,#64748b)'
                             : detailDriver.rank === 3 ? 'linear-gradient(135deg,#cd7c3a,#a85f25)'
                             : 'rgba(255,255,255,0.1)',
-                  borderRadius: 12, padding: '10px 22px',
+                  borderRadius: 12, padding: '8px 16px',
                   border: detailDriver.rank <= 3 ? 'none' : '1px solid rgba(255,255,255,0.2)',
                 }}>
-                  <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Peringkat</div>
-                  <div style={{ color: '#fff', fontSize: '2rem', fontWeight: 800, lineHeight: 1.1, marginTop: 2 }}>
+                  <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.6rem', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Peringkat</div>
+                  <div style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 800, lineHeight: 1.1, marginTop: 2 }}>
                     #{detailDriver.rank}
                   </div>
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', marginTop: 6 }}>
+                <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.7rem', marginTop: 4 }}>
                   Skor: <strong style={{ color: '#fff' }}>{Number(detailDriver.skor_total).toFixed(2)}</strong>
                 </div>
               </div>
@@ -377,7 +350,6 @@ export default function RankingPenilaian() {
                     <thead>
                       <tr>
                         <th>Periode</th>
-                        <th>Armada</th>
                         {detailData.bobot.map(b => (
                           <th key={b.bobot_id}>{b.nama_bobot}<br /><span style={{ fontWeight: 400, fontSize: '0.75rem' }}>({b.persentase_bobot}%)</span></th>
                         ))}
@@ -386,11 +358,10 @@ export default function RankingPenilaian() {
                     </thead>
                     <tbody>
                       {detailData.periodes.length === 0 ? (
-                        <tr><td colSpan={3 + detailData.bobot.length} className="text-center" style={{ padding: '32px 0', color: '#94a3b8' }}>Belum ada data penilaian</td></tr>
+                        <tr><td colSpan={2 + detailData.bobot.length} className="text-center" style={{ padding: '32px 0', color: '#94a3b8' }}>Belum ada data penilaian</td></tr>
                       ) : detailData.periodes.map(p => (
                         <tr key={p.penilaian_id}>
                           <td className="month-cell">{p.nama_periode}</td>
-                          <td className="text-center"><span className="armada-badge">{p.nama_armada}</span></td>
                           {detailData.bobot.map(b => (
                             <td key={b.bobot_id} className="text-center weighted-score">
                               {p.indicators.find(i => i.bobot_id === b.bobot_id)?.weighted_score ?? '-'}
