@@ -5022,15 +5022,15 @@ body {
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .manajemen-summary {
   display: flex;
   gap: 2rem;
-  color: white;
+  color: #334155;
 }
 
 .manajemen-summary p {
@@ -5044,6 +5044,7 @@ body {
 .manajemen-summary strong {
   font-size: 1.5rem;
   font-weight: 700;
+  color: #0f172a;
 }
 
 .manajemen-filters {

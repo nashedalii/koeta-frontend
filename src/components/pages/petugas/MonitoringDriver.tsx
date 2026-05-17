@@ -58,15 +58,42 @@ export default function MonitoringDriver() {
           ? `/api/users/driver?armada_id=${armadaId}`
           : '/api/users/driver'
 
-        const data: DriverData[] = await apiFetch(endpoint)
+        const [driverData, penilaianData] = await Promise.all([
+          apiFetch(endpoint),
+          apiFetch('/api/penilaian')
+        ])
 
-        // Skor masih statis sampai Fase 3 (penilaian) selesai
-        const withStats: DriverWithStats[] = (data ?? []).map(d => ({
-          ...d,
-          averageScore: 0,
-          latestMonthScore: 0,
-          trend: 'stable'
-        }))
+        const data: DriverData[] = driverData ?? []
+        const penilaians = penilaianData?.penilaians ?? []
+
+        // Group penilaian by driver_id (hanya yang approved)
+        const skorByDriver: Record<number, number[]> = {}
+        for (const p of penilaians) {
+          if (p.status_validasi === 'approved') {
+            if (!skorByDriver[p.driver_id]) skorByDriver[p.driver_id] = []
+            skorByDriver[p.driver_id].push(parseFloat(p.skor_total))
+          }
+        }
+
+        const withStats: DriverWithStats[] = data.map(d => {
+          const scores = skorByDriver[d.id] || []
+          const avg = scores.length > 0
+            ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100
+            : 0
+          const latest = scores.length > 0 ? scores[0] : 0 // scores sudah sorted by created_at DESC
+          const prev = scores.length > 1 ? scores[1] : latest
+
+          let trend: 'up' | 'down' | 'stable' = 'stable'
+          if (latest > prev) trend = 'up'
+          else if (latest < prev) trend = 'down'
+
+          return {
+            ...d,
+            averageScore: avg,
+            latestMonthScore: latest,
+            trend
+          }
+        })
 
         setDrivers(withStats)
       } catch (err: any) {
@@ -122,12 +149,19 @@ export default function MonitoringDriver() {
             </div>
 
             <div className="manajemen-filters">
-              <input
-                className="search-input"
-                placeholder="🔍 Cari driver atau kernet..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
+              <div className="search-box">
+                <span className="search-icon">
+                  <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                </span>
+                <input
+                  className="search-input"
+                  placeholder="Cari driver atau kernet..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                />
+              </div>
               <select
                 className="filter-select"
                 value={statusFilter}
