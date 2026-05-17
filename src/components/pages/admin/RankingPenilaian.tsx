@@ -481,6 +481,7 @@ export default function RankingPenilaian() {
                             </button>
                           </th>
                           <th>Nama Driver</th>
+                          {isSuperAdmin && <th style={{ width: 140 }}>Armada</th>}
                           {rankingData.bobot.map(b => (
                             <th key={b.bobot_id} style={{ width: 100 }}>
                               <button className="sort-button" onClick={() => handleSort(String(b.bobot_id))}>
@@ -518,6 +519,11 @@ export default function RankingPenilaian() {
                                 <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Kernet: {driver.nama_kernet}</span>
                               )}
                             </td>
+                            {isSuperAdmin && (
+                              <td className="text-center">
+                                <span className="armada-badge">{driver.nama_armada}</span>
+                              </td>
+                            )}
                             {rankingData.bobot.map(b => (
                               <td key={b.bobot_id} className="text-center weighted-score">
                                 {driver.indicators.find(i => i.bobot_id === b.bobot_id)?.weighted_score ?? '-'}

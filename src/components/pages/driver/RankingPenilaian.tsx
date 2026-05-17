@@ -324,7 +324,6 @@ export default function DriverRankingPenilaian() {
                       <tr>
                         <th style={{ width: 64 }}>Rank</th>
                         <th>Nama Driver</th>
-                        <th style={{ width: 140 }}>Armada</th>
                         {rankingData.bobot.map(b => (
                           <th key={b.bobot_id} style={{ width: 110 }}>
                             {b.nama_bobot}<br />
@@ -363,9 +362,6 @@ export default function DriverRankingPenilaian() {
                                 )}
                               </div>
                             </td>
-                            <td className="text-center">
-                              <span className="armada-badge">{driver.nama_armada}</span>
-                            </td>
                             {rankingData.bobot.map(b => (
                               <td key={b.bobot_id} className="text-center weighted-score" style={isMe ? { color: '#1d4ed8', fontWeight: 600 } : {}}>
                                 {driver.indicators.find(i => i.bobot_id === b.bobot_id)?.weighted_score ?? '-'}
@@ -397,7 +393,6 @@ export default function DriverRankingPenilaian() {
                         <tr>
                           <th style={{ width: 64 }}>Rank</th>
                           <th>Nama Driver</th>
-                          <th style={{ width: 140 }}>Armada</th>
                           {rankingData.bobot.map(b => (
                             <th key={b.bobot_id} style={{ width: 110 }}>
                               {b.nama_bobot}<br />
@@ -425,9 +420,6 @@ export default function DriverRankingPenilaian() {
                                 borderRadius: 4, padding: '2px 7px', flexShrink: 0,
                               }}>ANDA</span>
                             </div>
-                          </td>
-                          <td className="text-center">
-                            <span className="armada-badge">{myRow.nama_armada}</span>
                           </td>
                           {rankingData.bobot.map(b => (
                             <td key={b.bobot_id} className="text-center weighted-score" style={{ color: '#1d4ed8', fontWeight: 600 }}>
