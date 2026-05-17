@@ -405,33 +405,33 @@ export default function RankingPenilaian() {
 
             {/* Controls */}
             <div style={{
-              background: '#fff', borderRadius: 12, padding: '16px 20px',
+              background: '#fff', borderRadius: 12, padding: '14px 16px',
               border: '1px solid #e2e8f0',
-              display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center',
+              display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 160px', minWidth: 160 }}>
-                <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Siklus:</label>
-                <select className="filter-select" style={{ flex: 1 }} value={selectedSiklus}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: '1 1 140px', minWidth: 140 }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Siklus:</label>
+                <select className="filter-select" style={{ flex: 1, fontSize: '0.8rem' }} value={selectedSiklus}
                   onChange={e => setSelectedSiklus(e.target.value ? Number(e.target.value) : '')}>
-                  <option value="">-- Pilih Siklus --</option>
+                  <option value="">-- Pilih --</option>
                   {siklusList.map(s => <option key={s.siklus_id} value={s.siklus_id}>{s.nama_siklus}</option>)}
                 </select>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 160px', minWidth: 160 }}>
-                <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Periode:</label>
-                <select className="filter-select" style={{ flex: 1 }} value={selectedPeriode}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: '1 1 140px', minWidth: 140 }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Periode:</label>
+                <select className="filter-select" style={{ flex: 1, fontSize: '0.8rem' }} value={selectedPeriode}
                   onChange={e => setSelectedPeriode(e.target.value === 'all' ? 'all' : Number(e.target.value))}
                   disabled={!selectedSiklus}>
-                  <option value="all">Semua Periode (Rata-rata)</option>
+                  <option value="all">Semua (Rata-rata)</option>
                   {periodeList.map(p => <option key={p.periode_id} value={p.periode_id}>{p.nama_periode}</option>)}
                 </select>
               </div>
               {isSuperAdmin && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 160px', minWidth: 160 }}>
-                  <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Armada:</label>
-                  <select className="filter-select" style={{ flex: 1 }} value={selectedArmada}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: '1 1 140px', minWidth: 140 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>Armada:</label>
+                  <select className="filter-select" style={{ flex: 1, fontSize: '0.8rem' }} value={selectedArmada}
                     onChange={e => { setSelectedArmada(e.target.value ? Number(e.target.value) : ''); setRankingData(null) }}>
-                    <option value="">Semua Armada</option>
+                    <option value="">Semua</option>
                     {armadaList.map(a => <option key={a.armada_id} value={a.armada_id}>{a.nama_armada}</option>)}
                   </select>
                 </div>
@@ -481,12 +481,11 @@ export default function RankingPenilaian() {
                             </button>
                           </th>
                           <th>Nama Driver</th>
-                          <th style={{ width: 150 }}>Armada</th>
                           {rankingData.bobot.map(b => (
-                            <th key={b.bobot_id} style={{ width: 110 }}>
+                            <th key={b.bobot_id} style={{ width: 100 }}>
                               <button className="sort-button" onClick={() => handleSort(String(b.bobot_id))}>
-                                {b.nama_bobot}<br />
-                                <span style={{ fontWeight: 400, fontSize: '0.7rem' }}>({b.persentase_bobot}%)</span>
+                                {b.nama_bobot}
+                                <br /><span style={{ fontWeight: 400, fontSize: '0.65rem' }}>{b.persentase_bobot}%</span>
                                 {' '}<SortIcon field={String(b.bobot_id)} />
                               </button>
                             </th>
@@ -518,9 +517,6 @@ export default function RankingPenilaian() {
                               {driver.nama_kernet && (
                                 <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Kernet: {driver.nama_kernet}</span>
                               )}
-                            </td>
-                            <td className="text-center">
-                              <span className="armada-badge">{driver.nama_armada}</span>
                             </td>
                             {rankingData.bobot.map(b => (
                               <td key={b.bobot_id} className="text-center weighted-score">
