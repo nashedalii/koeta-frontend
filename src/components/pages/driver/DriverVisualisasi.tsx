@@ -267,14 +267,15 @@ export default function DriverVisualisasi() {
         }
         actions={
           siklusList.length > 0 ? (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', width: '100%' }}>
             <select
               value={selectedSiklusId ?? ''}
               onChange={e => setSelectedSiklusId(Number(e.target.value))}
               style={{
-                padding: '7px 12px', borderRadius: 8, fontSize: '0.8125rem', fontWeight: 500,
+                padding: '6px 28px 6px 10px', borderRadius: 8, fontSize: '0.75rem', fontWeight: 500,
                 background: 'rgba(255,255,255,0.15)', color: '#fff',
                 border: '1px solid rgba(255,255,255,0.25)', cursor: 'pointer',
+                flex: 1, minWidth: 0, maxWidth: '50%',
               }}
             >
               {siklusList.map(s => (
@@ -285,13 +286,14 @@ export default function DriverVisualisasi() {
               value={chartType}
               onChange={e => setChartType(e.target.value as ChartType)}
               style={{
-                padding: '7px 12px', borderRadius: 8, fontSize: '0.8125rem', fontWeight: 500,
+                padding: '6px 10px', borderRadius: 8, fontSize: '0.75rem', fontWeight: 500,
                 background: 'rgba(255,255,255,0.15)', color: '#fff',
                 border: '1px solid rgba(255,255,255,0.25)', cursor: 'pointer',
+                flex: 1, minWidth: 0, maxWidth: '50%',
               }}
             >
               <option value="total" style={{ color: '#0f172a' }}>Grafik Total</option>
-              <option value="components" style={{ color: '#0f172a' }}>Grafik per Komponen</option>
+              <option value="components" style={{ color: '#0f172a' }}>Per Komponen</option>
             </select>
           </div>
           ) : undefined

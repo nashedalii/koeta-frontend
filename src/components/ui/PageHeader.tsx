@@ -65,7 +65,7 @@ export default function PageHeader({ title, subtitle, icon, actions }: PageHeade
         </div>
       </div>
       {actions && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: isMobile ? undefined : 0, flexWrap: 'wrap', width: isMobile ? '100%' : undefined }}>
           {actions}
         </div>
       )}
