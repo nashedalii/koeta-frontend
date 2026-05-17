@@ -92,9 +92,9 @@ export default function MonitoringDriver() {
   }, [drivers, searchQuery, statusFilter])
 
   const getTrendIndicator = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up')   return { icon: '⬆️', color: '#16a34a', text: 'Meningkat' }
-    if (trend === 'down') return { icon: '⬇️', color: '#dc2626', text: 'Menurun' }
-    return { icon: '➡️', color: '#6b7280', text: 'Stabil' }
+    if (trend === 'up')   return { icon: '↑', color: '#ffffff', text: 'Meningkat' }
+    if (trend === 'down') return { icon: '↓', color: '#ffffff', text: 'Menurun' }
+    return { icon: '→', color: '#ffffff', text: 'Stabil' }
   }
 
   // ── Render ───────────────────────────────────────────────────────────
@@ -154,64 +154,35 @@ export default function MonitoringDriver() {
                   key={driver.id}
                   className="driver-card"
                   onClick={() => setSelectedDriver(driver)}
+                  style={{ padding: '14px 16px', cursor: 'pointer' }}
                 >
-                  {/* Accent strip */}
-                  <div className={`driver-card-accent${driver.status_aktif !== 'aktif' ? ' inactive' : ''}`} />
-
-                  <div className="driver-card-header">
-                    <div className="driver-header-left">
-                      <div className={`driver-avatar${driver.status_aktif !== 'aktif' ? ' inactive' : ''}`}>
-                        {driver.nama.split(' ').slice(0, 2).map((w: string) => w[0]).join('').toUpperCase()}
-                      </div>
-                      <div className="driver-name-group">
-                        <h3 className="driver-name">{driver.nama}</h3>
-                        <span className="driver-armada-text">
-                          <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-                          </svg>
-                          {driver.nama_armada ?? '-'}
-                        </span>
-                      </div>
+                  {/* Header: nama + status */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <h3 className="driver-name" style={{ margin: 0, fontSize: '0.9rem' }}>{driver.nama}</h3>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#64748b' }}>{driver.nama_armada ?? '-'}</p>
                     </div>
-                    <div className="driver-right">
-                      <span className={`status-pill ${driver.status_aktif === 'aktif' ? 'active' : 'inactive'}`}>
-                        {driver.status_aktif === 'aktif' ? 'Aktif' : 'Non-aktif'}
-                      </span>
-                    </div>
+                    <span className={`status-pill ${driver.status_aktif === 'aktif' ? 'active' : 'inactive'}`} style={{ flexShrink: 0, fontSize: '0.7rem' }}>
+                      {driver.status_aktif === 'aktif' ? 'Aktif' : 'Non-aktif'}
+                    </span>
                   </div>
 
-                  <div className="driver-card-body">
-                    <div className="driver-info-grid">
-                      <div className="driver-info-item">
-                        <span className="driver-info-label">Bus</span>
-                        <span className={`driver-info-value${!driver.kode_bus ? ' empty' : ''}`}>
-                          {driver.kode_bus ?? '—'}
-                        </span>
-                      </div>
-                      <div className="driver-info-item">
-                        <span className="driver-info-label">Plat</span>
-                        <span className={`driver-info-value${!driver.nopol ? ' empty' : ''}`}>
-                          {driver.nopol ?? '—'}
-                        </span>
-                      </div>
-                      <div className="driver-info-item" style={{ gridColumn: '1 / -1' }}>
-                        <span className="driver-info-label">Kernet</span>
-                        <span className={`driver-info-value${!driver.nama_kernet ? ' empty' : ''}`}>
-                          {driver.nama_kernet ?? '—'}
-                        </span>
-                      </div>
-                    </div>
+                  {/* Info: bus + kernet */}
+                  <div style={{ fontSize: '0.75rem', color: '#475569', marginBottom: 8 }}>
+                    <span>{driver.kode_bus ? `${driver.kode_bus} — ${driver.nopol}` : 'Bus belum diassign'}</span>
+                    {driver.nama_kernet && <span style={{ marginLeft: 8, color: '#94a3b8' }}>Kernet: {driver.nama_kernet}</span>}
+                  </div>
 
-                    <div className="metric">
-                      <div>
-                        <span className="muted">Rata-rata</span>
-                        <span className="large">{driver.averageScore}<small style={{ fontSize: '0.65rem', fontWeight: 600, color: '#64748b', marginLeft: 2 }}>poin</small></span>
-                      </div>
-                      <div className="metric-divider" />
-                      <div>
-                        <span className="muted">Bulan Ini</span>
-                        <span className="large">{driver.latestMonthScore}</span>
-                      </div>
+                  {/* Skor */}
+                  <div style={{ display: 'flex', gap: 12, fontSize: '0.75rem' }}>
+                    <div>
+                      <span style={{ color: '#94a3b8', display: 'block' }}>Rata-rata</span>
+                      <strong style={{ color: '#1e293b', fontSize: '0.9rem' }}>{driver.averageScore}</strong>
+                    </div>
+                    <div style={{ width: 1, background: '#e2e8f0' }} />
+                    <div>
+                      <span style={{ color: '#94a3b8', display: 'block' }}>Bulan Ini</span>
+                      <strong style={{ color: '#1e293b', fontSize: '0.9rem' }}>{driver.latestMonthScore}</strong>
                     </div>
                   </div>
                 </div>
@@ -220,7 +191,6 @@ export default function MonitoringDriver() {
 
             {filtered.length === 0 && (
               <div className="empty-state">
-                <div className="empty-icon">👥</div>
                 <h3>Tidak ada driver ditemukan</h3>
                 <p>Coba ubah filter pencarian atau status</p>
               </div>
