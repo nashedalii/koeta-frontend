@@ -879,7 +879,12 @@ export default function KelolaUser() {
                   <label className="form-label">Role <span className="required">*</span></label>
                   <CustomSelect
                     value={addFormData.role}
-                    onChange={val => setAddFormData({ ...EMPTY_ADD_FORM, role: val as any })}
+                    onChange={val => setAddFormData({
+                      ...addFormData,
+                      role: val as any,
+                      // Reset field spesifik driver saja
+                      bus_id: '', koridor_id: '', nama_kernet: '',
+                    })}
                     options={[
                       ...(isSuperAdmin ? [{ value: 'super_admin', label: 'Super Admin' }] : []),
                       ...(isSuperAdmin ? [{ value: 'admin', label: 'Admin Vendor' }] : []),
