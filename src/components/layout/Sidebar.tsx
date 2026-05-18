@@ -71,7 +71,8 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
 
   const profileHref =
     userRole === 'Petugas' ? '/petugas/profile' :
-    userRole === 'Supir'   ? '/driver/profile'  : '#'
+    userRole === 'Supir'   ? '/driver/profile'  :
+    userRole === 'Admin'   ? '/admin/profile'   : '#'
 
   // Menu items untuk Admin
   const adminMenuItems = [
@@ -339,9 +340,8 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
 
         {/* Footer: Profile + Logout */}
         <div className="sidebar-footer">
-          {/* Profile link — hanya untuk petugas & driver */}
-          {userRole !== 'Admin' && (
-            <Link
+          {/* Profile link */}
+          <Link
               href={profileHref}
               className={`nav-item ${pathname === profileHref ? 'active' : ''}`}
               title={!isOpen ? 'Profil Saya' : undefined}
@@ -368,7 +368,6 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
                 </span>
               )}
             </Link>
-          )}
 
           <button
             className="logout-button"

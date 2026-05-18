@@ -30,6 +30,8 @@ interface Profile {
 }
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string; gradient: string }> = {
+  super_admin: { label: 'Super Admin', color: '#dc2626', bg: '#fee2e2', gradient: 'linear-gradient(135deg,#991b1b,#dc2626)' },
+  admin:   { label: 'Admin Vendor', color: '#d97706', bg: '#fef3c7', gradient: 'linear-gradient(135deg,#b45309,#f59e0b)' },
   driver:  { label: 'Driver',  color: '#2563eb', bg: '#dbeafe', gradient: 'linear-gradient(135deg,#1d4ed8,#3b82f6)' },
   petugas: { label: 'Petugas', color: '#7c3aed', bg: '#ede9fe', gradient: 'linear-gradient(135deg,#6d28d9,#8b5cf6)' },
 }
@@ -157,10 +159,11 @@ export default function ProfilePage() {
 
   const isDriver  = profile.role === 'driver'
   const isPetugas = profile.role === 'petugas'
+  const isAdmin   = profile.role === 'admin' || profile.role === 'super_admin'
   const roleConf  = ROLE_CONFIG[profile.role] ?? ROLE_CONFIG.driver
 
   const infoItems = [
-    isPetugas && profile.nomor_pegawai ? { icon: idIcon, label: 'Nomor Pegawai', value: profile.nomor_pegawai } : null,
+    (isPetugas || isAdmin) && profile.nomor_pegawai ? { icon: idIcon, label: 'Nomor Pegawai', value: profile.nomor_pegawai } : null,
     profile.nama_armada               ? { icon: armadaIcon, label: 'Armada', value: `${profile.kode_armada} — ${profile.nama_armada}` } : null,
     isDriver && profile.nama_kernet   ? { icon: kernetIcon, label: 'Nama Kernet', value: profile.nama_kernet } : null,
     isDriver && profile.kode_bus      ? { icon: busIcon, label: 'Bus', value: `${profile.kode_bus} (${profile.nopol})` } : null,
