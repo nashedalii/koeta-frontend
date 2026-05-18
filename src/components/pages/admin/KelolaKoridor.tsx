@@ -84,6 +84,7 @@ export default function KelolaKoridor() {
   const [armadaFilter, setArmadaFilter] = useState('All')
   const [isSuperAdmin, setIsSuperAdmin] = useState(false)
   const [armadaOptions, setArmadaOptions] = useState<ArmadaOption[]>([])
+  const [isMobile, setIsMobile] = useState(false)
 
   const [showModal, setShowModal]           = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -107,6 +108,13 @@ export default function KelolaKoridor() {
       setError(err.message ?? 'Gagal memuat data koridor')
     } finally { setLoading(false) }
   }
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     try {
@@ -230,7 +238,7 @@ export default function KelolaKoridor() {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/* ── Table / Cards ── */}
       {loading ? (
         <div className="loading-state">Memuat data koridor...</div>
       ) : error ? (
@@ -238,7 +246,43 @@ export default function KelolaKoridor() {
           <p>{error}</p>
           <button onClick={fetchKoridors} className="btn-edit">Coba Lagi</button>
         </div>
+      ) : isMobile ? (
+        /* ── Mobile Cards ── */
+        <div className="user-card-list" style={{ background: 'white', borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+          {filtered.length === 0 ? (
+            <div className="no-data" style={{ background: 'white', borderRadius: 12, padding: 24, textAlign: 'center', color: '#94a3b8' }}>
+              <p>Tidak ada data koridor</p>
+            </div>
+          ) : filtered.map(k => (
+            <div key={k.koridor_id} className="user-card">
+              <div className="user-card-left">
+                <div className="user-card-info">
+                  <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {k.nama_koridor}
+                    <TipeBadge tipe={k.tipe} />
+                  </div>
+                  {isSuperAdmin && k.nama_armada && (
+                    <div className="user-card-meta">
+                      <span className="role-badge role-petugas" style={{ fontSize: '0.65rem', padding: '2px 7px' }}>{k.nama_armada}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="user-card-right">
+                <div className="user-card-actions">
+                  <button onClick={() => openEdit(k)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px' }}>
+                    <EditIcon />
+                  </button>
+                  <button onClick={() => openDelete(k)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px' }}>
+                    <TrashIcon />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
+        /* ── Desktop Table ── */
         <div className="table-container">
           <table className="user-table">
             <thead>
@@ -278,39 +322,6 @@ export default function KelolaKoridor() {
           {filtered.length === 0 && (
             <div className="no-data"><p>Tidak ada data koridor</p></div>
           )}
-        </div>
-      )}
-
-      {/* ── Mobile Cards ── */}
-      {!loading && !error && (
-        <div className="user-card-list">
-          {filtered.map(k => (
-            <div key={k.koridor_id} className="user-card">
-              <div className="user-card-left">
-                <div className="user-card-info">
-                  <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {k.nama_koridor}
-                    <TipeBadge tipe={k.tipe} />
-                  </div>
-                  {isSuperAdmin && k.nama_armada && (
-                    <div className="user-card-meta">
-                      <span className="role-badge role-petugas" style={{ fontSize: '0.65rem', padding: '2px 7px' }}>{k.nama_armada}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="user-card-right">
-                <div className="user-card-actions">
-                  <button onClick={() => openEdit(k)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px' }}>
-                    <EditIcon />
-                  </button>
-                  <button onClick={() => openDelete(k)} className="btn-delete" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '6px 8px' }}>
-                    <TrashIcon />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
       )}
 
