@@ -368,7 +368,7 @@ export default function AdminDashboard() {
         />
 
         {/* ── Warning Periode ──────────────────────────────────── */}
-        {data.warning_periode?.aktif && (() => {
+        {isSuperAdmin && data.warning_periode?.aktif && (() => {
           const hari = data.warning_periode!.hari_tersisa
           const isRed    = hari <= 7
           const isYellow = hari <= 14 && hari > 7
@@ -405,7 +405,7 @@ export default function AdminDashboard() {
         })()}
 
         {/* ── Warning Bobot ───────────────────────────────────── */}
-        {data.warning_bobot && (
+        {isSuperAdmin && data.warning_bobot && (
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             gap: 12, flexWrap: 'wrap',
@@ -432,7 +432,7 @@ export default function AdminDashboard() {
         )}
 
         {/* ── Siklus Tertunda ─────────────────────────────────── */}
-        {data.siklus_tertunda && (
+        {isSuperAdmin && data.siklus_tertunda && (
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             gap: 12, flexWrap: 'wrap',

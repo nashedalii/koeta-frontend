@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/utils/api'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -60,6 +61,18 @@ const STATUS_CONFIG = {
 
 // ── Component ──────────────────────────────────────────────────────────────
 export default function KonfigurasiPenilaian() {
+  const router = useRouter()
+
+  // Hanya super_admin yang boleh akses halaman ini
+  useEffect(() => {
+    try {
+      const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+      if (auth?.user?.role !== 'super_admin') {
+        router.replace('/admin/dashboard')
+      }
+    } catch { router.replace('/admin/dashboard') }
+  }, [router])
+
   const [sikluses, setSikluses]           = useState<Siklus[]>([])
   const [loading, setLoading]             = useState(true)
   const [error, setError]                 = useState('')

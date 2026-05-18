@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import PageHeader from '@/components/ui/PageHeader'
 
 interface Siklus {
@@ -36,6 +37,18 @@ const DEFAULT_INDIKATORS: Indikator[] = [
 ]
 
 export default function KonfigurasiPenilaian() {
+  const router = useRouter()
+
+  // Hanya super_admin yang boleh akses halaman ini
+  useEffect(() => {
+    try {
+      const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+      if (auth?.user?.role !== 'super_admin') {
+        router.replace('/admin/dashboard')
+      }
+    } catch { router.replace('/admin/dashboard') }
+  }, [router])
+
   const [siklusList, setSiklusList] = useState<Siklus[]>([])
   const [selectedSiklusId, setSelectedSiklusId] = useState<number | null>(null)
   const [selectedSiklus, setSelectedSiklus] = useState<Siklus | null>(null)
