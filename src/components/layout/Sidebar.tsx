@@ -241,14 +241,27 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
       {/* ── Mobile Top Navbar ── */}
       {isMobile && (
         <header className="mobile-navbar">
-          <Image
-            src="/logopanjangdishub.png"
-            alt="Logo Dishub Aceh"
-            width={130}
-            height={44}
-            style={{ objectFit: 'contain', height: 36, width: 'auto' }}
-            priority
-          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+              background: 'rgba(255,255,255,0.12)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
+            }}>
+              <Image
+                src="/logodishub.png"
+                alt="Logo Dishub"
+                width={30}
+                height={30}
+                priority
+                style={{ width: 30, height: 30, objectFit: 'contain' }}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+              <span style={{ color: '#fff', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.04em' }}>DISHUB</span>
+              <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '0.7rem', letterSpacing: '0.06em' }}>ACEH</span>
+            </div>
+          </div>
           <button
             className="mobile-hamburger"
             onClick={() => setIsOpen(true)}
@@ -273,30 +286,34 @@ export default function Sidebar({ onLogout, userRole }: SidebarProps) {
 
       {/* Sidebar */}
       <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+
         {/* Header */}
         <div className="sidebar-header">
-          <div className="logo-container">
-            {isOpen ? (
-              <Image
-                src="/logopanjangdishub.png"
-                alt="Logo Dishub Aceh"
-                width={180}
-                height={60}
-                className="logo-full"
-                priority
-              />
-            ) : (
-              <Image
-                src="/logodishub.png"
-                alt="Logo Dishub"
-                width={40}
-                height={40}
-                className="logo-icon"
-                priority
-                style={{ width: 'auto', height: 'auto' }}
-              />
-            )}
-          </div>
+          {isOpen && (
+            <div className="logo-container">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                  background: 'rgba(255,255,255,0.12)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  overflow: 'hidden',
+                }}>
+                  <Image
+                    src="/logodishub.png"
+                    alt="Logo Dishub"
+                    width={34}
+                    height={34}
+                    priority
+                    style={{ width: 34, height: 34, objectFit: 'contain' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                  <span style={{ color: '#fff', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>DISHUB</span>
+                  <span style={{ color: '#fff', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>ACEH</span>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Desktop: toggle collapse | Mobile: tombol X tutup */}
           {isMobile ? (
             <button className="toggle-btn" onClick={() => setIsOpen(false)} aria-label="Tutup Menu">
