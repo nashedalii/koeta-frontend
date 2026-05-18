@@ -1,5 +1,5 @@
-import KelolaUser from '@/components/pages/admin/KelolaUser'
+import { redirect } from 'next/navigation'
 
 export default function KelolaUserPage() {
-  return <KelolaUser />
+  redirect('/admin/kelola-data#user')
 }

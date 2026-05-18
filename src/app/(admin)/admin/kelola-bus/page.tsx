@@ -1,5 +1,5 @@
-import KelolaBus from '@/components/pages/admin/KelolaBus'
+import { redirect } from 'next/navigation'
 
 export default function KelolaBusPage() {
-  return <KelolaBus />
+  redirect('/admin/kelola-data#bus')
 }

@@ -9545,3 +9545,15 @@ input, select, textarea, button {
     width: 100%;
   }
 }
+
+
+/* ── Kelola Data Embedded Tabs ─────────────────────────────────────────── */
+/* Neutralise the inner dashboard-container when KelolaUser/KelolaBus
+   are rendered inside KelolaData's tab panel */
+.kelola-embedded .dashboard-container {
+  min-height: unset;
+}
+.kelola-embedded .dashboard-content {
+  max-width: none;
+  padding: 0;
+}
