@@ -224,7 +224,7 @@ export default function AdminDashboard() {
         const result = await apiFetch('/api/dashboard/admin')
         setData(result)
         setTop5List(result.top5_ranking ?? [])
-        if (result.alert_bobot_h1) setShowH1Alert(true)
+        if (superAdmin && result.alert_bobot_h1) setShowH1Alert(true)
         setTop5Periode(
           result.top5_ranking?.[0]?.nama_periode
             ?? result.periode_aktif?.nama_periode
@@ -746,8 +746,8 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* ── Popup Alert H-1 Bobot ── */}
-      {showH1Alert && data?.alert_bobot_h1 && (
+      {/* ── Popup Alert H-1 Bobot (super_admin only) ── */}
+      {isSuperAdmin && showH1Alert && data?.alert_bobot_h1 && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 99998,
           background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
