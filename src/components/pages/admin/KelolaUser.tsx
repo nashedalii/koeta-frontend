@@ -773,7 +773,7 @@ export default function KelolaUser() {
                       options={[{ value: 'aktif', label: 'Aktif' }, { value: 'nonaktif', label: 'Nonaktif' }]}
                     />
                   </div>
-                  {selectedUser.role !== 'super_admin' && selectedUser.role !== 'admin' && (
+                  {isSuperAdmin && selectedUser.role !== 'super_admin' && selectedUser.role !== 'admin' && (
                     <div className="form-group">
                       <label className="form-label">Armada</label>
                       <CustomSelect
@@ -882,7 +882,7 @@ export default function KelolaUser() {
                     onChange={val => setAddFormData({ ...EMPTY_ADD_FORM, role: val as any })}
                     options={[
                       ...(isSuperAdmin ? [{ value: 'super_admin', label: 'Super Admin' }] : []),
-                      { value: 'admin', label: 'Admin Vendor' },
+                      ...(isSuperAdmin ? [{ value: 'admin', label: 'Admin Vendor' }] : []),
                       { value: 'petugas', label: 'Petugas' },
                       { value: 'driver', label: 'Supir' },
                     ]}
@@ -908,7 +908,7 @@ export default function KelolaUser() {
                     <input type="tel" value={addFormData.no_hp} onChange={e => setAddFormData({ ...addFormData, no_hp: e.target.value })} placeholder="08xxxxxxxxxx" className="form-input" />
                   </div>
                 </div>
-                {addFormData.role !== 'super_admin' && (
+                {isSuperAdmin && addFormData.role !== 'super_admin' && (
                   <div className="form-group">
                     <label className="form-label">Armada <span className="required">*</span></label>
                     <CustomSelect
