@@ -72,6 +72,7 @@ export default function DriverDashboard() {
   const [error, setError]           = useState<string | null>(null)
   const [countdown, setCountdown]   = useState<string | null>(null)
   const [siklusMendatang, setSiklusMendatang] = useState<{ nama_siklus: string; tanggal_mulai: string } | null>(null)
+  const [periodeAktifNama, setPeriodeAktifNama] = useState<string | null>(null)
 
   // Fetch siklus mendatang (untuk timer)
   useEffect(() => {
@@ -81,7 +82,14 @@ export default function DriverDashboard() {
         if (result?.siklus) setSiklusMendatang(result.siklus)
       } catch { /* ignore */ }
     }
+    const fetchPeriode = async () => {
+      try {
+        const result = await apiFetch('/api/periode/aktif')
+        if (result?.periode) setPeriodeAktifNama(result.periode.nama_periode)
+      } catch { /* ignore */ }
+    }
     fetchMendatang()
+    fetchPeriode()
   }, [])
 
   // Timer countdown
@@ -242,26 +250,33 @@ export default function DriverDashboard() {
             <h1 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em' }}>
               Selamat Datang, {profile.nama_driver}
             </h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  background: isAktif ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)',
-                  border: `1px solid ${isAktif ? 'rgba(52,211,153,0.5)' : 'rgba(252,165,165,0.5)'}`,
-                  borderRadius: 999,
-                  padding: '4px 12px',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: isAktif ? '#6ee7b7' : '#fca5a5',
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" width={12} height={12}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                borderRadius: 999, padding: '4px 12px',
+                fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.9)',
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" width={14} height={14}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5h-6m3 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497" />
                 </svg>
-                Status: {isAktif ? 'Aktif' : 'Nonaktif'}
+                Armada {profile.nama_armada || '—'}
               </span>
+              {periodeAktifNama && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(16,185,129,0.2)',
+                  border: '1px solid rgba(52,211,153,0.5)',
+                  borderRadius: 999, padding: '4px 12px',
+                  fontSize: 12, fontWeight: 600, color: '#6ee7b7',
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" width={14} height={14}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                  Periode: {periodeAktifNama}
+                </span>
+              )}
             </div>
           </div>
 
