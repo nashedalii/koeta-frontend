@@ -309,6 +309,14 @@ export default function KelolaUser() {
   const [callerId, setCallerId]         = useState<number | null>(null)
   const [armadaOptions, setArmadaOptions] = useState<ArmadaOption[]>([])
   const [pendingResetCount, setPendingResetCount] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const [users, setUsers]         = useState<UserData[]>([])
   const [loading, setLoading]     = useState(true)
@@ -528,71 +536,79 @@ export default function KelolaUser() {
       <div className="dashboard-content">
 
         {/* ── Controls ── */}
-        <div style={{
-          display: 'flex', gap: 10, alignItems: 'center',
-          marginBottom: 16, flexWrap: 'wrap',
-        }}>
-          {/* Search */}
-          <div className="search-box" style={{ flex: '1 1 200px', minWidth: 160 }}>
-            <span className="search-icon"><SearchIcon /></span>
-            <input
-              type="text"
-              placeholder="Cari nama atau no HP..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-          </div>
-
-          {/* Role filter */}
-          <select
-            value={roleFilter}
-            onChange={e => setRoleFilter(e.target.value)}
-            className="role-filter"
-            style={{ flex: '0 0 auto', minWidth: 140 }}
-          >
-            <option value="All">Semua Role</option>
-            {isSuperAdmin && <option value="super_admin">Super Admin</option>}
-            <option value="admin">Admin</option>
-            <option value="petugas">Petugas</option>
-            <option value="driver">Supir</option>
-          </select>
-
-          {/* Lupa Password */}
-          <button
-            onClick={() => router.push('/admin/reset-password')}
-            style={{
-              position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
-              background: '#fff', border: '1.5px solid #e2e8f0',
-              borderRadius: 10, padding: '10px 16px',
-              fontSize: 13, fontWeight: 600, color: '#334155', cursor: 'pointer',
-              whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 'auto',
-            }}
-          >
-            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            Lupa Password
-            {pendingResetCount > 0 && (
-              <span style={{
-                position: 'absolute', top: -7, right: -7,
-                background: '#ef4444', color: '#fff',
-                borderRadius: '50%', width: 18, height: 18,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 10, fontWeight: 700,
+        {isMobile ? (
+          /* Mobile: multi-row */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+            <div className="search-box" style={{ width: '100%' }}>
+              <span className="search-icon"><SearchIcon /></span>
+              <input type="text" placeholder="Cari nama atau no HP..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="role-filter" style={{ flex: 1 }}>
+                <option value="All">Semua Role</option>
+                {isSuperAdmin && <option value="super_admin">Super Admin</option>}
+                <option value="admin">Admin</option>
+                <option value="petugas">Petugas</option>
+                <option value="driver">Supir</option>
+              </select>
+              <button onClick={() => router.push('/admin/reset-password')} style={{
+                position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
+                background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 10,
+                padding: '10px 14px', fontSize: 13, fontWeight: 600, color: '#334155',
+                cursor: 'pointer', whiteSpace: 'nowrap', flex: 1, justifyContent: 'center',
               }}>
-                {pendingResetCount > 9 ? '9+' : pendingResetCount}
-              </span>
-            )}
-          </button>
-
-          {/* Tambah User */}
-          <button onClick={openAdd} className="btn-add-user" style={{ flexShrink: 0 }}>
-            <PlusIcon />
-            <span>Tambah User</span>
-          </button>
-        </div>
+                <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Lupa Password
+                {pendingResetCount > 0 && (
+                  <span style={{ position: 'absolute', top: -7, right: -7, background: '#ef4444', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>
+                    {pendingResetCount > 9 ? '9+' : pendingResetCount}
+                  </span>
+                )}
+              </button>
+            </div>
+            <button onClick={openAdd} className="btn-add-user" style={{ width: '100%' }}>
+              <PlusIcon /><span>Tambah User</span>
+            </button>
+          </div>
+        ) : (
+          /* Desktop: single row */
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16 }}>
+            <div className="search-box" style={{ flex: '1 1 200px', minWidth: 160 }}>
+              <span className="search-icon"><SearchIcon /></span>
+              <input type="text" placeholder="Cari nama atau no HP..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
+            </div>
+            <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="role-filter" style={{ flex: '0 0 auto', minWidth: 140 }}>
+              <option value="All">Semua Role</option>
+              {isSuperAdmin && <option value="super_admin">Super Admin</option>}
+              <option value="admin">Admin</option>
+              <option value="petugas">Petugas</option>
+              <option value="driver">Supir</option>
+            </select>
+            <div style={{ display: 'flex', gap: 10, marginLeft: 'auto', flexShrink: 0 }}>
+              <button onClick={() => router.push('/admin/reset-password')} style={{
+                position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
+                background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 10,
+                padding: '10px 16px', fontSize: 13, fontWeight: 600, color: '#334155',
+                cursor: 'pointer', whiteSpace: 'nowrap',
+              }}>
+                <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Lupa Password
+                {pendingResetCount > 0 && (
+                  <span style={{ position: 'absolute', top: -7, right: -7, background: '#ef4444', color: '#fff', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>
+                    {pendingResetCount > 9 ? '9+' : pendingResetCount}
+                  </span>
+                )}
+              </button>
+              <button onClick={openAdd} className="btn-add-user">
+                <PlusIcon /><span>Tambah User</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── Table ── */}
         {loading ? (

@@ -66,6 +66,14 @@ export default function ResetPasswordRequests() {
   const [result, setResult] = useState<ResetResult | null>(null)
   const [copied, setCopied] = useState(false)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const showToast = (type: 'success' | 'error', text: string) => {
     setToast({ type, text })
@@ -165,7 +173,7 @@ export default function ResetPasswordRequests() {
             {pending.length > 0 && (
               <div style={{ marginBottom: 32 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                  <h2 style={{ fontSize: 15, fontWeight: 700, color: 'white', margin: 0 }}>
+                  <h2 style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', margin: 0 }}>
                     Menunggu Diproses
                   </h2>
                   <span style={{
@@ -176,8 +184,8 @@ export default function ResetPasswordRequests() {
                 </div>
 
                 {/* Desktop table */}
-                <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
-                  className="reset-table-desktop">
+                {!isMobile && (
+                <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
                       <thead>
@@ -216,9 +224,11 @@ export default function ResetPasswordRequests() {
                     </table>
                   </div>
                 </div>
+                )}
 
                 {/* Mobile cards */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="reset-cards-mobile">
+                {isMobile && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {pending.map(r => (
                     <div key={r.request_id} style={{
                       background: '#fff', borderRadius: 14,
@@ -249,13 +259,14 @@ export default function ResetPasswordRequests() {
                     </div>
                   ))}
                 </div>
+                )}
               </div>
             )}
 
             {/* ── Selesai ── */}
             {selesai.length > 0 && (
               <div>
-                <h2 style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: 14 }}>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: '#64748b', marginBottom: 14 }}>
                   Sudah Diproses
                 </h2>
                 <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
@@ -359,16 +370,7 @@ export default function ResetPasswordRequests() {
         </div>
       )}
 
-      <style>{`
-        .reset-table-desktop { display: block; }
-        .reset-cards-mobile  { display: none; }
-        @media (max-width: 640px) {
-          .reset-table-desktop { display: none; }
-          .reset-cards-mobile  { display: flex; }
-        }
-      `}</style>
 
-      {/* ── Toast ── */}
       {toast && (
         <div style={{
           position: 'fixed', top: 24, right: 24, zIndex: 99999,
