@@ -528,8 +528,12 @@ export default function KelolaUser() {
       <div className="dashboard-content">
 
         {/* ── Controls ── */}
-        <div className="table-controls" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div className="search-box" style={{ width: '100%', maxWidth: '100%' }}>
+        <div style={{
+          display: 'flex', gap: 10, alignItems: 'center',
+          marginBottom: 16, flexWrap: 'wrap',
+        }}>
+          {/* Search */}
+          <div className="search-box" style={{ flex: '1 1 200px', minWidth: 160 }}>
             <span className="search-icon"><SearchIcon /></span>
             <input
               type="text"
@@ -540,45 +544,51 @@ export default function KelolaUser() {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 10, width: '100%' }}>
-            <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="role-filter" style={{ flex: 1, minWidth: 0 }}>
-              <option value="All">Semua Role</option>
-              {isSuperAdmin && <option value="super_admin">Super Admin</option>}
-              <option value="admin">Admin</option>
-              <option value="petugas">Petugas</option>
-              <option value="driver">Supir</option>
-            </select>
+          {/* Role filter */}
+          <select
+            value={roleFilter}
+            onChange={e => setRoleFilter(e.target.value)}
+            className="role-filter"
+            style={{ flex: '0 0 auto', minWidth: 140 }}
+          >
+            <option value="All">Semua Role</option>
+            {isSuperAdmin && <option value="super_admin">Super Admin</option>}
+            <option value="admin">Admin</option>
+            <option value="petugas">Petugas</option>
+            <option value="driver">Supir</option>
+          </select>
 
-            <button
-              onClick={() => router.push('/admin/reset-password')}
-              style={{
-                position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
-                background: '#fff', border: '1.5px solid #e2e8f0',
-                borderRadius: 8, padding: '8px 14px',
-                fontSize: 13, fontWeight: 600, color: '#334155', cursor: 'pointer',
-                whiteSpace: 'nowrap', flex: 1, minWidth: 0, justifyContent: 'center',
-              }}
-            >
-              <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              Lupa Password
-              {pendingResetCount > 0 && (
-                <span style={{
-                  position: 'absolute', top: -7, right: -7,
-                  background: '#ef4444', color: '#fff',
-                  borderRadius: '50%', width: 18, height: 18,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700,
-                }}>
-                  {pendingResetCount > 9 ? '9+' : pendingResetCount}
-                </span>
-              )}
-            </button>
-          </div>
+          {/* Lupa Password */}
+          <button
+            onClick={() => router.push('/admin/reset-password')}
+            style={{
+              position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
+              background: '#fff', border: '1.5px solid #e2e8f0',
+              borderRadius: 10, padding: '10px 16px',
+              fontSize: 13, fontWeight: 600, color: '#334155', cursor: 'pointer',
+              whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 'auto',
+            }}
+          >
+            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Lupa Password
+            {pendingResetCount > 0 && (
+              <span style={{
+                position: 'absolute', top: -7, right: -7,
+                background: '#ef4444', color: '#fff',
+                borderRadius: '50%', width: 18, height: 18,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 10, fontWeight: 700,
+              }}>
+                {pendingResetCount > 9 ? '9+' : pendingResetCount}
+              </span>
+            )}
+          </button>
 
-          <button onClick={openAdd} className="btn-add-user" style={{ width: '100%' }}>
+          {/* Tambah User */}
+          <button onClick={openAdd} className="btn-add-user" style={{ flexShrink: 0 }}>
             <PlusIcon />
             <span>Tambah User</span>
           </button>

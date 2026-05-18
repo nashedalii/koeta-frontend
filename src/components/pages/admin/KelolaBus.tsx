@@ -188,8 +188,8 @@ export default function KelolaBus() {
       <div className="dashboard-content">
 
         {/* ── Controls ── */}
-        <div className="table-controls" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div className="search-box" style={{ width: '100%', maxWidth: '100%' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }}>
+          <div className="search-box" style={{ flex: '1 1 200px', minWidth: 160 }}>
             <span className="search-icon"><SearchIcon /></span>
             <input
               type="text"
@@ -200,21 +200,19 @@ export default function KelolaBus() {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 10, width: '100%' }}>
-            {isSuperAdmin && (
-              <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter" style={{ flex: 1, minWidth: 0 }}>
-                <option value="All">Semua Armada</option>
-                {armadaOptions.map(a => (
-                  <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
-                ))}
-              </select>
-            )}
+          {isSuperAdmin && (
+            <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter" style={{ flex: '0 0 auto', minWidth: 140 }}>
+              <option value="All">Semua Armada</option>
+              {armadaOptions.map(a => (
+                <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
+              ))}
+            </select>
+          )}
 
-            <button onClick={openAdd} className="btn-add-user" style={{ flex: 1, minWidth: 0 }}>
-              <PlusIcon />
-              <span>Tambah Bus</span>
-            </button>
-          </div>
+          <button onClick={openAdd} className="btn-add-user" style={{ flexShrink: 0, marginLeft: 'auto' }}>
+            <PlusIcon />
+            <span>Tambah Bus</span>
+          </button>
         </div>
 
         {/* ── Table ── */}
