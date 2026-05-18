@@ -390,7 +390,11 @@ export default function KelolaUser() {
       const matchRole = roleFilter === 'All' || u.role === roleFilter
       return matchSearch && matchRole
     })
-    .sort((a, b) => (ROLE_ORDER[a.role] ?? 9) - (ROLE_ORDER[b.role] ?? 9))
+    .sort((a, b) => {
+      const roleSort = (ROLE_ORDER[a.role] ?? 9) - (ROLE_ORDER[b.role] ?? 9)
+      if (roleSort !== 0) return roleSort
+      return a.nama.localeCompare(b.nama)
+    })
 
   const openEdit = async (user: UserData) => {
     setSelectedUser(user)

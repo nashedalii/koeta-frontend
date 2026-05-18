@@ -139,7 +139,7 @@ export default function KelolaBus() {
       (b.nama_driver ?? '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchArmada = armadaFilter === 'All' || String(b.armada_id) === armadaFilter
     return matchSearch && matchArmada
-  })
+  }).sort((a, b) => a.kode_bus.localeCompare(b.kode_bus, undefined, { numeric: true }))
 
   const openAdd = () => { setModalMode('add'); setFormData(EMPTY_FORM); setSelectedBus(null); setShowModal(true) }
 
