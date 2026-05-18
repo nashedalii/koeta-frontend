@@ -1505,12 +1505,10 @@ body {
   box-shadow: 0 0 0 3px rgba(3, 30, 101, 0.1);
 }
 
-/* Add User Button */
-.btn-add-user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+/* Add User Button — see override at bottom of file */
+.btn-add-user-placeholder {
+  display: none;
+}
 
 /* ============================
    MANAJEMEN DRIVER STYLES
@@ -2104,27 +2102,6 @@ body {
   .score-value {
     font-size: 15px;
   }
-}
-
-  background: var(--primary-blue);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-add-user:hover {
-  background: #02174a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(3, 30, 101, 0.3);
-}
-
-.btn-add-user:active {
-  transform: translateY(0);
 }
 
 /* Table Container */
@@ -9044,13 +9021,13 @@ input, select, textarea, button {
   font-family: inherit !important;
 }
 
-/* ── btn-add-user: fix broken declaration + contrast on dark bg ─────── */
+/* ── btn-add-user: match active tab gradient ─────────────────────────── */
 .btn-add-user {
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
   padding: 10px 22px !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: linear-gradient(135deg, #031E65 0%, #0a2d8f 60%, #0369A1 100%) !important;
   color: #ffffff !important;
   border: none !important;
   border-radius: 12px !important;
@@ -9058,15 +9035,15 @@ input, select, textarea, button {
   font-weight: 600 !important;
   cursor: pointer !important;
   white-space: nowrap !important;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(3, 30, 101, 0.3) !important;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s !important;
 }
 
 .btn-add-user:hover {
   opacity: 0.92 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45) !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 6px 20px rgba(3, 30, 101, 0.4) !important;
+  background: linear-gradient(135deg, #031E65 0%, #0a2d8f 60%, #0369A1 100%) !important;
 }
 
 .btn-add-user:active {

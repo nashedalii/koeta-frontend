@@ -174,8 +174,8 @@ export default function ProfilePage() {
 
       {/* ── Page title ── */}
       <div>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: 'white', margin: 0 }}>Profil Saya</h1>
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>Kelola informasi akun dan keamanan Anda</p>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: '#0f172a', margin: 0 }}>Profil Saya</h1>
+        <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>Kelola informasi akun dan keamanan Anda</p>
       </div>
 
       {/* ── Hero Card: Avatar + Identitas ── */}
