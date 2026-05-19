@@ -551,7 +551,7 @@ export default function KelolaUser() {
           return (
             <div style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${cards.length}, 1fr)`,
+              gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(140px, 1fr))' : `repeat(${cards.length}, 1fr)`,
               gap: 10, marginBottom: 16,
             }}>
               {cards.map(card => (

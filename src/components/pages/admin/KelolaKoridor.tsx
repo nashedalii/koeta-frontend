@@ -247,7 +247,7 @@ export default function KelolaKoridor() {
 
         const allCards = [...baseCards, ...extraCards]
         return (
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${allCards.length}, 1fr)`, gap: 10, marginBottom: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(140px, 1fr))' : `repeat(${allCards.length}, 1fr)`, gap: 10, marginBottom: 16 }}>
             {allCards.map(card => (
               <div key={card.label} style={{
                 background: '#fff', borderRadius: 12, padding: '12px 14px',

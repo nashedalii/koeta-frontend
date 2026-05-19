@@ -155,7 +155,9 @@ export default function ValidasiDataPetugas() {
   useEffect(() => {
     try {
       const auth = JSON.parse(localStorage.getItem('auth') || '{}')
-      setIsSuperAdmin(auth?.user?.role === 'super_admin')
+      const isSA = auth?.user?.role === 'super_admin'
+      setIsSuperAdmin(isSA)
+      if (isSA) setViewMode('list')
     } catch {}
   }, [])
 
@@ -294,9 +296,11 @@ export default function ValidasiDataPetugas() {
           }
           actions={
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <div style={{ display: 'flex', background: 'rgba(255,255,255,0.15)', borderRadius: 10, padding: 3, gap: 2 }}>
-                {(['grid', 'list'] as ViewMode[]).map(mode => (
-                  <button key={mode} onClick={() => setViewMode(mode)}
+              {/* Grid/List toggle — hanya untuk admin vendor */}
+              {!isSuperAdmin && (
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.15)', borderRadius: 10, padding: 3, gap: 2 }}>
+                  {(['grid', 'list'] as ViewMode[]).map(mode => (
+                    <button key={mode} onClick={() => setViewMode(mode)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 6,
                       padding: '6px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
@@ -310,6 +314,7 @@ export default function ValidasiDataPetugas() {
                   </button>
                 ))}
               </div>
+              )}
               <button onClick={fetchList} disabled={isLoading}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
