@@ -323,6 +323,7 @@ export default function KelolaUser() {
   const [error, setError]         = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState('All')
+  const [armadaFilter, setArmadaFilter] = useState('All')
 
   const [showModal, setShowModal]           = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -396,7 +397,8 @@ export default function KelolaUser() {
         u.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
         u.no_hp.toLowerCase().includes(searchTerm.toLowerCase())
       const matchRole = roleFilter === 'All' || u.role === roleFilter
-      return matchSearch && matchRole
+      const matchArmada = armadaFilter === 'All' || String(u.armada_id) === armadaFilter
+      return matchSearch && matchRole && matchArmada
     })
     .sort((a, b) => {
       const roleSort = (ROLE_ORDER[a.role] ?? 9) - (ROLE_ORDER[b.role] ?? 9)
@@ -576,6 +578,7 @@ export default function KelolaUser() {
               <span className="search-icon"><SearchIcon /></span>
               <input type="text" placeholder="Cari nama atau no HP..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
             </div>
+            {/* Row 2: Role + Armada (super_admin) */}
             <div style={{ display: 'flex', gap: 10 }}>
               <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="role-filter" style={{ flex: 1 }}>
                 <option value="All">Semua Role</option>
@@ -584,6 +587,17 @@ export default function KelolaUser() {
                 <option value="petugas">Petugas</option>
                 <option value="driver">Supir</option>
               </select>
+              {isSuperAdmin && (
+                <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter" style={{ flex: 1 }}>
+                  <option value="All">Semua Armada</option>
+                  {armadaOptions.map(a => (
+                    <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            {/* Row 3: Lupa Password + Tambah User */}
+            <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => router.push('/admin/reset-password')} style={{
                 position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
                 background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 10,
@@ -600,10 +614,10 @@ export default function KelolaUser() {
                   </span>
                 )}
               </button>
+              <button onClick={openAdd} className="btn-add-user" style={{ flex: 1 }}>
+                <PlusIcon /><span>Tambah User</span>
+              </button>
             </div>
-            <button onClick={openAdd} className="btn-add-user" style={{ width: '100%' }}>
-              <PlusIcon /><span>Tambah User</span>
-            </button>
           </div>
         ) : (
           /* Desktop: single row */
@@ -619,6 +633,14 @@ export default function KelolaUser() {
               <option value="petugas">Petugas</option>
               <option value="driver">Supir</option>
             </select>
+            {isSuperAdmin && (
+              <select value={armadaFilter} onChange={e => setArmadaFilter(e.target.value)} className="role-filter" style={{ flex: '0 0 auto', minWidth: 140 }}>
+                <option value="All">Semua Armada</option>
+                {armadaOptions.map(a => (
+                  <option key={a.armada_id} value={String(a.armada_id)}>{a.nama_armada}</option>
+                ))}
+              </select>
+            )}
             <div style={{ display: 'flex', gap: 10, marginLeft: 'auto', flexShrink: 0 }}>
               <button onClick={() => router.push('/admin/reset-password')} style={{
                 position: 'relative', display: 'flex', alignItems: 'center', gap: 6,
