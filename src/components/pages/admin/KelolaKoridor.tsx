@@ -202,6 +202,54 @@ export default function KelolaKoridor() {
 
   return (
     <div>
+      {/* ── Stat Cards ── */}
+      {!loading && (() => {
+        const totalKoridor = koridors.length
+        const jumlahKoridor = koridors.filter(k => k.tipe === 'koridor').length
+        const jumlahFeeder  = koridors.filter(k => k.tipe === 'feeder').length
+
+        const baseCards = [
+          { label: 'Total Koridor', value: totalKoridor, color: '#0369a1', bg: '#e0f2fe' },
+          { label: 'Koridor', value: jumlahKoridor, color: '#2563eb', bg: '#dbeafe' },
+          { label: 'Feeder', value: jumlahFeeder, color: '#d97706', bg: '#fef3c7' },
+        ]
+
+        // Super admin: tambah top 3 armada
+        let extraCards: { label: string; value: number; color: string; bg: string }[] = []
+        if (isSuperAdmin) {
+          const armadaCount: Record<string, { nama: string; count: number }> = {}
+          koridors.forEach(k => {
+            if (k.armada_id && k.nama_armada) {
+              const key = String(k.armada_id)
+              if (!armadaCount[key]) armadaCount[key] = { nama: k.nama_armada, count: 0 }
+              armadaCount[key].count++
+            }
+          })
+          const armadaColors = ['#2563eb', '#7c3aed', '#059669']
+          const armadaBgs = ['#dbeafe', '#ede9fe', '#d1fae5']
+          extraCards = Object.values(armadaCount)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 3)
+            .map((a, i) => ({ label: a.nama, value: a.count, color: armadaColors[i], bg: armadaBgs[i] }))
+        }
+
+        const allCards = [...baseCards, ...extraCards]
+        return (
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${allCards.length}, 1fr)`, gap: 10, marginBottom: 16 }}>
+            {allCards.map(card => (
+              <div key={card.label} style={{
+                background: '#fff', borderRadius: 12, padding: '12px 14px',
+                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                borderTop: `3px solid ${card.color}`,
+              }}>
+                <p style={{ margin: 0, fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.label}</p>
+                <p style={{ margin: '6px 0 0', fontSize: 22, fontWeight: 800, color: card.color }}>{card.value}</p>
+              </div>
+            ))}
+          </div>
+        )
+      })()}
+
       {/* ── Controls ── */}
       {isMobile ? (
         /* Mobile: multi-row */

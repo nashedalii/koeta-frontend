@@ -535,6 +535,39 @@ export default function KelolaUser() {
     <div className="dashboard-container">
       <div className="dashboard-content">
 
+        {/* ── Stat Cards ── */}
+        {!loading && (() => {
+          const cards = isSuperAdmin ? [
+            { label: 'Total User', value: users.length, color: '#2563eb', bg: '#dbeafe' },
+            { label: 'Super Admin', value: users.filter(u => u.role === 'super_admin').length, color: '#be185d', bg: '#fce7f3' },
+            { label: 'Admin', value: users.filter(u => u.role === 'admin').length, color: '#d97706', bg: '#fef3c7' },
+            { label: 'Petugas', value: users.filter(u => u.role === 'petugas').length, color: '#7c3aed', bg: '#ede9fe' },
+            { label: 'Supir', value: users.filter(u => u.role === 'driver').length, color: '#059669', bg: '#d1fae5' },
+          ] : [
+            { label: 'Total User', value: users.length, color: '#2563eb', bg: '#dbeafe' },
+            { label: 'Petugas', value: users.filter(u => u.role === 'petugas').length, color: '#7c3aed', bg: '#ede9fe' },
+            { label: 'Supir', value: users.filter(u => u.role === 'driver').length, color: '#059669', bg: '#d1fae5' },
+          ]
+          return (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${cards.length}, 1fr)`,
+              gap: 10, marginBottom: 16,
+            }}>
+              {cards.map(card => (
+                <div key={card.label} style={{
+                  background: '#fff', borderRadius: 12, padding: '12px 14px',
+                  border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                  borderTop: `3px solid ${card.color}`,
+                }}>
+                  <p style={{ margin: 0, fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{card.label}</p>
+                  <p style={{ margin: '6px 0 0', fontSize: 22, fontWeight: 800, color: card.color }}>{card.value}</p>
+                </div>
+              ))}
+            </div>
+          )
+        })()}
+
         {/* ── Controls ── */}
         {isMobile ? (
           /* Mobile: multi-row */
