@@ -7,6 +7,7 @@ interface KoridorData {
   koridor_id: number
   nama_koridor: string
   tipe: 'koridor' | 'feeder'
+  status_aktif: 'aktif' | 'nonaktif'
   armada_id: number | null
   kode_armada: string | null
   nama_armada: string | null
@@ -15,6 +16,7 @@ interface KoridorData {
 interface FormData {
   nama_koridor: string
   tipe: 'koridor' | 'feeder'
+  status_aktif: 'aktif' | 'nonaktif'
   armada_id: string
 }
 
@@ -24,7 +26,7 @@ interface ArmadaOption {
   nama_armada: string
 }
 
-const EMPTY_FORM: FormData = { nama_koridor: '', tipe: 'koridor', armada_id: '' }
+const EMPTY_FORM: FormData = { nama_koridor: '', tipe: 'koridor', status_aktif: 'aktif', armada_id: '' }
 
 // ── SVG Icons ──────────────────────────────────────────────────────────
 const SearchIcon = () => (
@@ -71,6 +73,16 @@ function TipeBadge({ tipe }: { tipe: string }) {
       border: `1px solid ${isKoridor ? '#bfdbfe' : '#fde68a'}`,
     }}>
       {isKoridor ? 'Koridor' : 'Feeder'}
+    </span>
+  )
+}
+
+function StatusDot({ status }: { status: string }) {
+  const active = status === 'aktif'
+  return (
+    <span className={`status-badge status-${status}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ width: 7, height: 7, borderRadius: '50%', background: active ? '#10b981' : '#ef4444', display: 'inline-block', flexShrink: 0 }} />
+      {active ? 'Aktif' : 'Nonaktif'}
     </span>
   )
 }
@@ -159,7 +171,7 @@ export default function KelolaKoridor() {
   const openEdit = (k: KoridorData) => {
     setModalMode('edit')
     setSelectedKoridor(k)
-    setFormData({ nama_koridor: k.nama_koridor, tipe: k.tipe, armada_id: k.armada_id?.toString() ?? '' })
+    setFormData({ nama_koridor: k.nama_koridor, tipe: k.tipe, status_aktif: k.status_aktif, armada_id: k.armada_id?.toString() ?? '' })
     setShowModal(true)
   }
 
@@ -169,7 +181,7 @@ export default function KelolaKoridor() {
     }
     setSaving(true)
     try {
-      const body: Record<string, any> = { nama_koridor: formData.nama_koridor, tipe: formData.tipe }
+      const body: Record<string, any> = { nama_koridor: formData.nama_koridor, tipe: formData.tipe, status_aktif: formData.status_aktif }
       if (isSuperAdmin && formData.armada_id) body.armada_id = parseInt(formData.armada_id)
       if (modalMode === 'add') {
         await apiFetch('/api/koridor', { method: 'POST', body: JSON.stringify(body) })
@@ -321,6 +333,7 @@ export default function KelolaKoridor() {
                   <div className="user-card-name" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {k.nama_koridor}
                     <TipeBadge tipe={k.tipe} />
+                    <StatusDot status={k.status_aktif} />
                   </div>
                   {isSuperAdmin && k.nama_armada && (
                     <div className="user-card-meta">
@@ -352,6 +365,7 @@ export default function KelolaKoridor() {
                 <th>Nama Koridor / Feeder</th>
                 <th>Tipe</th>
                 {isSuperAdmin && <th>Armada</th>}
+                <th>Status</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -368,6 +382,7 @@ export default function KelolaKoridor() {
                         : <span style={{ color: '#94a3b8' }}>—</span>}
                     </td>
                   )}
+                  <td><StatusDot status={k.status_aktif} /></td>
                   <td className="action-buttons">
                     <button onClick={() => openEdit(k)} className="btn-edit" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                       <EditIcon /> Edit
@@ -415,6 +430,17 @@ export default function KelolaKoridor() {
                   >
                     <option value="koridor">Koridor</option>
                     <option value="feeder">Feeder</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Status</label>
+                  <select
+                    value={formData.status_aktif}
+                    onChange={e => setFormData({ ...formData, status_aktif: e.target.value as any })}
+                    className="form-select"
+                  >
+                    <option value="aktif">Aktif</option>
+                    <option value="nonaktif">Nonaktif</option>
                   </select>
                 </div>
                 {isSuperAdmin && (
