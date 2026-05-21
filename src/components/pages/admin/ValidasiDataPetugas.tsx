@@ -517,9 +517,9 @@ export default function ValidasiDataPetugas() {
                     const score = Number(p.skor_total)
                     const scoreColor = score >= 90 ? '#059669' : score >= 75 ? '#2563eb' : score >= 60 ? '#d97706' : '#dc2626'
                     return (
-                      <tr key={p.penilaian_id} style={{ background: idx % 2 === 0 ? rowBg : '#fff', borderBottom: '1px solid #f3f4f6', transition: 'background 0.15s' }}
+                      <tr key={p.penilaian_id} style={{ background: rowBg, borderBottom: '1px solid #f3f4f6', transition: 'background 0.15s' }}
                         onMouseEnter={e => (e.currentTarget as HTMLTableRowElement).style.background = '#f8fafc'}
-                        onMouseLeave={e => (e.currentTarget as HTMLTableRowElement).style.background = idx % 2 === 0 ? rowBg : '#fff'}
+                        onMouseLeave={e => (e.currentTarget as HTMLTableRowElement).style.background = rowBg}
                       >
                         <td style={{ padding: '11px 14px', color: '#9ca3af', fontWeight: 500 }}>{idx + 1}</td>
                         <td style={{ padding: '11px 14px', fontWeight: 700, color: '#111827', whiteSpace: 'nowrap' }}>{p.nama_driver}</td>

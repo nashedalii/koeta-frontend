@@ -1896,7 +1896,7 @@ body {
 }
 
 .perf-value.main {
-  color: #3b82f6;
+  color: #111827;
 }
 
 .trend-display {
@@ -5439,28 +5439,35 @@ body {
 }
 
 .perf-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f8fafc;
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
-  color: white;
+  color: #111827;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .perf-label {
   display: block;
   font-size: 0.85rem;
-  opacity: 0.9;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
 }
 
 .perf-value {
   display: block;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: #111827;
 }
 
 .perf-value.main {
   font-size: 2.5rem;
+  color: #111827;
 }
 
 .trend-display {

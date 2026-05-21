@@ -119,9 +119,9 @@ export default function MonitoringDriver() {
   }, [drivers, searchQuery, statusFilter])
 
   const getTrendIndicator = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up')   return { icon: '↑', color: '#ffffff', text: 'Meningkat' }
-    if (trend === 'down') return { icon: '↓', color: '#ffffff', text: 'Menurun' }
-    return { icon: '→', color: '#ffffff', text: 'Stabil' }
+    if (trend === 'up')   return { icon: '↑', color: '#059669', text: 'Meningkat' }
+    if (trend === 'down') return { icon: '↓', color: '#dc2626', text: 'Menurun' }
+    return { icon: '→', color: '#64748b', text: 'Stabil' }
   }
 
   // ── Render ───────────────────────────────────────────────────────────

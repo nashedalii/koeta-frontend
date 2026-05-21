@@ -291,13 +291,13 @@ export default function PetugasDashboard() {
             {/* Three status values stacked in a row — bounded inside card */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
               {[
-                { label: 'Approved', val: p.approved, color: '#10b981', bg: '#f0fdf4' },
-                { label: 'Pending',  val: p.pending,  color: '#f59e0b', bg: '#fffbeb' },
-                { label: 'Rejected', val: p.rejected,  color: '#ef4444', bg: '#fef2f2' },
+                { label: 'Approved', val: p.approved, color: '#059669', bg: '#f0fdf4', border: '#bbf7d0' },
+                { label: 'Pending',  val: p.pending,  color: '#d97706', bg: '#fffbeb', border: '#fde68a' },
+                { label: 'Rejected', val: p.rejected,  color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
               ].map(item => (
-                <div key={item.label} style={{ flex: 1, textAlign: 'center', background: item.bg, borderRadius: 10, padding: '8px 4px' }}>
-                  <p style={{ margin: 0, fontSize: 22, fontWeight: 800, color: item.color, lineHeight: 1 }}>{item.val}</p>
-                  <p style={{ margin: '3px 0 0', fontSize: 10, fontWeight: 600, color: item.color, opacity: 0.8 }}>{item.label}</p>
+                <div key={item.label} style={{ flex: 1, textAlign: 'center', background: item.bg, border: `1px solid ${item.border}`, borderRadius: 10, padding: '8px 4px' }}>
+                  <p style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111827', lineHeight: 1 }}>{item.val}</p>
+                  <p style={{ margin: '3px 0 0', fontSize: 10, fontWeight: 600, color: item.color }}>{item.label}</p>
                 </div>
               ))}
             </div>
@@ -315,7 +315,7 @@ export default function PetugasDashboard() {
                 </svg>
               </div>
             </div>
-            <p style={{ margin: '0 0 4px', fontSize: 42, fontWeight: 800, color: skor != null ? skorColor : '#94a3b8', lineHeight: 1 }}>
+            <p style={{ margin: '0 0 4px', fontSize: 42, fontWeight: 800, color: '#111827', lineHeight: 1 }}>
               {skor != null ? skor.toFixed(1) : '—'}
             </p>
             <p style={{ margin: 0, fontSize: 12, color: '#94a3b8' }}>
