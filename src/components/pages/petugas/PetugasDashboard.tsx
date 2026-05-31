@@ -259,6 +259,38 @@ export default function PetugasDashboard() {
           </div>
         )}
 
+        {/* ── Warning: Periode hampir berakhir + belum selesai input ── */}
+        {data.periode_aktif && data.driver_belum_dinilai.length > 0 && (() => {
+          const selesai = new Date(`${data.periode_aktif.tanggal_selesai}T23:59:59`)
+          const hariTersisa = Math.ceil((selesai.getTime() - Date.now()) / 86400000)
+          if (hariTersisa > 7) return null
+          const isRed = hariTersisa <= 3
+          return (
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              gap: 12, flexWrap: 'wrap',
+              background: isRed ? '#fef2f2' : '#fffbeb',
+              border: `1.5px solid ${isRed ? '#fca5a5' : '#fcd34d'}`,
+              borderRadius: 14, padding: '14px 20px', marginBottom: 20,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 18 }}>{isRed ? '🔴' : '⚠️'}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: isRed ? '#991b1b' : '#92400e' }}>
+                  Periode berakhir dalam {hariTersisa} hari — masih ada {data.driver_belum_dinilai.length} driver belum dinilai!
+                </span>
+              </div>
+              <a href="/petugas/input-validasi" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '7px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                background: isRed ? '#dc2626' : '#d97706', color: '#fff', textDecoration: 'none',
+                whiteSpace: 'nowrap', flexShrink: 0,
+              }}>
+                Input Penilaian →
+              </a>
+            </div>
+          )
+        })()}
+
         {/* ── Stat Cards ───────────────────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16, marginBottom: 24 }}>
 
