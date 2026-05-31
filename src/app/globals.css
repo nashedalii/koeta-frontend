@@ -4277,7 +4277,7 @@ body {
 }
 
 .back-button {
-  background: #f8fafc;
+  background: #fff;
   border: 2px solid #e2e8f0;
   color: var(--primary-blue);
   padding: 10px 20px;
@@ -4289,11 +4289,14 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  text-decoration: none;
 }
 
 .back-button:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
+  background: #f1f5f9;
+  border-color: var(--primary-blue);
+  box-shadow: 0 2px 8px rgba(3,30,101,0.12);
 }
 
 .chart-type-controls {

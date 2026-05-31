@@ -275,7 +275,7 @@ export default function RankingPenilaian() {
                   display: 'inline-flex', alignItems: 'center', gap: 4,
                   background: 'none', border: 'none',
                   padding: '4px 0',
-                  fontSize: '0.8rem', fontWeight: 500, color: 'rgba(255,255,255,0.7)',
+                  fontSize: '0.8rem', fontWeight: 500, color: '#334155',
                   cursor: 'pointer',
                 }}
               >
