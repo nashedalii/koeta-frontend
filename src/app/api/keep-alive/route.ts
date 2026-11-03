@@ -2,9 +2,18 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get('secret')
+  const expected = process.env.CRON_SECRET
 
-  if (!secret || secret !== process.env.CRON_SECRET) {
+  // GitHub Actions mengirim lewat query: ?secret=...
+  const querySecret = request.nextUrl.searchParams.get('secret')
+  // Vercel Cron mengirim lewat header: Authorization: Bearer ...
+  const authHeader = request.headers.get('authorization')
+
+  const authorized =
+    !!expected &&
+    (querySecret === expected || authHeader === `Bearer ${expected}`)
+
+  if (!authorized) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
